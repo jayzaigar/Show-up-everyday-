@@ -243,6 +243,7 @@ a { color: inherit; }
   margin-top: 14px;
   margin-bottom: 0;
 }
+.access-note { margin-top: 0; margin-bottom: 18px; font-style: italic; }
 
 .hero-media {
   margin-top: 48px;
@@ -323,6 +324,7 @@ a { color: inherit; }
   border-radius: 2px;
   transition: transform .35s var(--ease), border-color .35s ease, box-shadow .35s ease;
 }
+.who-for-list li strong { display: block; color: var(--cream); margin-bottom: 4px; }
 .who-for-list li:hover {
   transform: translateY(-4px);
   border-color: rgba(198, 138, 107, 0.35);

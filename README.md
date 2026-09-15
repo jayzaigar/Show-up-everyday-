@@ -83,10 +83,8 @@ buttons show immediately instead of waiting on a video that doesn't exist. Once 
   `[INSERT FREE WHATSAPP GROUP LINK]`.
 - **VIP WhatsApp group link**: `join-whatsapp-vip.html`, the button's `href` is
   `[INSERT VIP WHATSAPP GROUP LINK]`.
-- **VIP ticket copy and VSL**: `vip-offer.html` has placeholder headline/body copy
-  (`[INSERT VIP TICKET HEADLINE]`, `[INSERT VIP TICKET OFFER DETAILS...]`) and a VSL placeholder (see
-  above) reserving space for the VIP pitch video. Swap in the real headline, offer details, and video
-  once you have them.
+- **VIP VSL**: `vip-offer.html`'s headline, offer copy and "What's included" list are filled in. The VSL
+  is still a placeholder (see above); swap in the real video once you have it.
 - **Free-series VSL video**: `index.html`'s hero photo slot is a placeholder (dashed border, play icon,
   "[VSL VIDEO PLACEHOLDER]" label). Swap the `.hero-media-placeholder` block for the real embed
   (YouTube/Vimeo/Wistia iframe, or a `<video>` tag) once that VSL is ready.
