@@ -14,11 +14,11 @@
 
 <div class="confirm-wrap">
   <div class="confirm-card">
-    <div class="confirm-icon">Saved</div>
-    <h1 id="confirm-heading">Your seat is saved.</h1>
+    <div class="confirm-icon">You're in</div>
+    <h1 id="confirm-heading">You're in — check your email.</h1>
     <p>
-      Check your email — we've sent the WhatsApp group link along with your event details. Join from there to get
-      the live links, reminders and preparation instructions.
+      We've sent your confirmation along with the WhatsApp group link. Join from there to get the live
+      links, reminders and preparation instructions.
     </p>
     <p class="microcopy" style="margin-top:18px;">
       Didn't get the email? Check your spam folder or reach out — we'll make sure you're set up.
@@ -26,7 +26,7 @@
   </div>
 </div>
 
-<footer class="site-footer on-black">
+<footer class="site-footer">
   <p>&copy; SSELFIE.ai — The Show Up Everyday Series</p>
 </footer>
 
@@ -34,7 +34,7 @@
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name');
   if (name) {
-    document.getElementById('confirm-heading').textContent = `You're in, ${name}. Your seat is saved.`;
+    document.getElementById('confirm-heading').textContent = `You're in, ${name} — check your email.`;
   }
 </script>
 </body>

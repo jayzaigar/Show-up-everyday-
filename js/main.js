@@ -1,6 +1,8 @@
 // Registration form handler.
-// This posts nowhere by default — wire FORM_ENDPOINT up to your email/CRM
-// provider's form action (e.g. an ESP's hosted endpoint) before going live.
+// This posts nowhere by default — set FORM_ENDPOINT to your automation
+// provider's webhook/form URL (e.g. Resend, ManyChat, or any ESP) before
+// going live. The payload below ({ first_name, email }) is already shaped
+// to drop straight into most providers' form-submission APIs.
 const FORM_ENDPOINT = '';
 
 const form = document.getElementById('register-form');
@@ -21,7 +23,7 @@ form.addEventListener('submit', async (event) => {
 
   const submitButton = form.querySelector('button[type="submit"]');
   submitButton.disabled = true;
-  submitButton.textContent = 'Saving your seat...';
+  submitButton.textContent = 'Saving your spot...';
 
   const payload = { first_name: firstName, email };
 
