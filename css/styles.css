@@ -125,8 +125,26 @@ a { color: inherit; }
 }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(140, 93, 69, 0.45); }
 
+.btn-outline {
+  background: transparent;
+  color: var(--cream-dim);
+  border-color: var(--line);
+}
+.btn-outline:hover { border-color: var(--clay-light); color: var(--cream); }
+
 .btn-lg { padding: 18px 34px; font-size: 0.86rem; }
 .btn-full { width: 100%; }
+
+/* ---------- Path choice (VIP offer page) ---------- */
+.path-choice {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  margin-top: 8px;
+}
+@media (min-width: 560px) {
+  .path-choice { grid-auto-flow: column; }
+}
 
 /* ---------- Sections ---------- */
 .section { padding-block: 68px; position: relative; }
