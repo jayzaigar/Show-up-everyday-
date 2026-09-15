@@ -12,7 +12,7 @@ A static, mobile-first registration landing page for the free 5-day live experie
 
 ## Before launch, fill in these placeholders
 
-- `[INSERT DATES]` and `[INSERT TIME AND TIMEZONE]` — in `index.html` (hero + registration section)
+- Dates and time are set to October 4–8, 2026, 7PM CEST (UTC+2) — update in `index.html` (hero + registration section) if this changes
 - `[INSERT RECORDING DETAILS]` — in `index.html` FAQ ("Will recordings be available?")
 - Replace `images/sandra-hero.jpg` with a final, full-resolution photo (the current one is cropped from a low-res screenshot)
 - Set `FORM_ENDPOINT` in `js/main.js` to your email/CRM provider's form submission endpoint so registrations are actually captured (currently the form just validates and redirects to the confirmation page)
