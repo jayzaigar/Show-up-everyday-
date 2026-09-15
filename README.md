@@ -5,7 +5,7 @@ A static, mobile-first registration landing page for the free 5-day live experie
 ## Files
 
 - `index.html` — the landing page (hero, problem, transformation, 5-day breakdown, why-different, what-to-bring, registration form, FAQ, final CTA)
-- `confirmation.html` — post-registration page, links to the WhatsApp group
+- `confirmation.html` — post-registration page; tells them to check their email for the WhatsApp group link
 - `css/styles.css` — all styling: black + warm cream palette, Fraunces (display) + Inter (body), sharp-cornered buttons, hairline-divided lists — matching sselfie.ai's visual system
 - `js/main.js` — client-side form validation + redirect to `confirmation.html`
 - `images/sandra-hero.jpg` — cropped from a screenshot of sselfie.ai supplied for this task; swap in final campaign photography before launch
@@ -13,10 +13,10 @@ A static, mobile-first registration landing page for the free 5-day live experie
 ## Before launch, fill in these placeholders
 
 - `[INSERT DATES]` and `[INSERT TIME AND TIMEZONE]` — in `index.html` (hero + registration section)
-- `[INSERT WHATSAPP LINK]` — in `confirmation.html` (Join the WhatsApp Group button)
 - `[INSERT RECORDING DETAILS]` — in `index.html` FAQ ("Will recordings be available?")
 - Replace `images/sandra-hero.jpg` with a final, full-resolution photo (the current one is cropped from a low-res screenshot)
 - Set `FORM_ENDPOINT` in `js/main.js` to your email/CRM provider's form submission endpoint so registrations are actually captured (currently the form just validates and redirects to the confirmation page)
+- Make sure your email/CRM's confirmation email actually includes the WhatsApp group link — the confirmation page no longer links to it directly, it just tells people to check their email
 
 ## Local preview
 
