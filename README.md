@@ -8,19 +8,40 @@ Dark editorial look: near-black backgrounds, clay/terracotta accents, cream text
 
 ```
 index.html (register: first name + email)
+  -> [5s analyzing loading screen]
   -> confirmation.html ("Thank you for registering" + Click Here to Join the WhatsApp Group)
+       -> [5s analyzing loading screen]
        -> vip-offer.html (VIP pitch: hero + VSL placeholder + two paths)
             -> Keep Free Ticket -> join-whatsapp-free.html -> free WhatsApp group link
             -> Upgrade to VIP   -> Whop checkout -> (after purchase, Whop redirects to)
                                     join-whatsapp-vip.html -> VIP WhatsApp group link
 ```
 
+## Analyzing loading screens
+
+Two points in the funnel show a 5-second full-screen loading sequence (spinner, progress bar, four
+rotating status lines) before moving on. This is purely perceived-value UX; nothing is actually being
+analyzed or verified.
+
+- **After submitting the registration form** (`index.html`): "Reviewing what you shared" -> "Matching
+  your answers to the right track" -> "Personalizing your experience" -> "Saving your spot", then
+  redirects to `confirmation.html`.
+- **After clicking "Click Here to Join the WhatsApp Group"** (`confirmation.html`): "Verifying your
+  registration" -> "Connecting to the WhatsApp group" -> "Setting up your access" -> "Almost there",
+  then redirects to `vip-offer.html`.
+
+Both reuse the same `.analyzing-overlay` markup pattern and the shared `runAnalyzingSequence(messages,
+durationMs, onDone)` function in `js/site.js`. To add this to another transition, copy the
+`.analyzing-overlay` block from either page, give the page's link/button a click handler that calls
+`runAnalyzingSequence([...messages], 5000, () => window.location.href = '...')`, and call
+`event.preventDefault()` first so the click doesn't navigate immediately.
+
 ## Files
 
 - `index.html`: the free-series landing page: hero, who-this-is-for, five-day breakdown, why-free,
   registration form, social proof (placeholder), FAQ, final CTA
-- `confirmation.html`: post-registration page ("Thank you for registering"), single button to
-  `vip-offer.html`
+- `confirmation.html`: post-registration page ("Thank you for registering"), single button that runs a
+  5-second "analyzing" loading screen before landing on `vip-offer.html`
 - `vip-offer.html`: the VIP ticket pitch, same hero/VSL-placeholder structure as `index.html`, with two
   buttons: **Keep Free Ticket** (-> `join-whatsapp-free.html`) and **Upgrade to VIP** (-> your Whop
   checkout link)
@@ -31,9 +52,10 @@ index.html (register: first name + email)
 - `css/styles.css`: all styling: near-black + clay/terracotta + cream palette, grain-texture overlay, a
   thin ring/lens-mark motif in the hero, Playfair Display + Inter
 - `js/site.js`: shared behavior loaded on every page: forces new pages to open scrolled to the top
-  (fixes the browser landing mid-page after a click), fades sections in as you scroll past them, and
+  (fixes the browser landing mid-page after a click), fades sections in as you scroll past them,
   (on `vip-offer.html` only) gates the Keep Free Ticket / Upgrade to VIP buttons behind the VSL's last
-  10 seconds
+  10 seconds, and provides the reusable `runAnalyzingSequence()` loading-screen sequence used on both
+  `index.html` (after submitting) and `confirmation.html` (after clicking through to the VIP page)
 - `js/main.js`: client-side form validation + redirect to `confirmation.html`; payload is already shaped
   as `{ first_name, email }` to drop into most ESP/automation form-submission APIs
 - `images/sandra-hero.jpg`: no longer used on the page; kept in the repo in case it's needed again

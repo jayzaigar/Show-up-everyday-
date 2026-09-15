@@ -37,51 +37,16 @@ form.addEventListener('submit', async (event) => {
     }).catch((err) => console.error('Registration submit failed', err));
   }
 
-  runAnalyzingSequence(() => {
-    window.location.href = `confirmation.html?name=${encodeURIComponent(firstName)}`;
-  });
-});
-
-// Perceived-value "analyzing" loading screen: nothing is actually being
-// analyzed, this is purely a few seconds of reassurance before the
-// confirmation page. See the .analyzing-overlay markup at the end of the
-// registration section.
-function runAnalyzingSequence(onDone) {
-  const overlay = document.getElementById('analyzing-overlay');
-  if (!overlay) { onDone(); return; }
-
-  const messageEl = document.getElementById('analyzing-message');
-  const barFill = document.getElementById('analyzing-bar-fill');
   const messages = [
     'Reviewing what you shared',
     'Matching your answers to the right track',
     'Personalizing your experience',
     'Saving your spot',
   ];
-  const totalDuration = 5000;
-  const stepDuration = totalDuration / messages.length;
-
-  overlay.classList.add('is-active');
-  // Force layout before adding the visible class, so the opacity transition runs.
-  overlay.getBoundingClientRect();
-  overlay.classList.add('is-visible');
-  barFill.getBoundingClientRect();
-  barFill.style.width = '100%';
-
-  let step = 0;
-  messageEl.textContent = messages[0];
-  const interval = setInterval(() => {
-    step += 1;
-    if (step < messages.length) {
-      messageEl.textContent = messages[step];
-    }
-  }, stepDuration);
-
-  setTimeout(() => {
-    clearInterval(interval);
-    onDone();
-  }, totalDuration);
-}
+  runAnalyzingSequence(messages, 5000, () => {
+    window.location.href = `confirmation.html?name=${encodeURIComponent(firstName)}`;
+  });
+});
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);

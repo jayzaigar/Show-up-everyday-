@@ -17,7 +17,18 @@
     <div class="confirm-icon">You're in</div>
     <h1 id="confirm-heading">Thank you for registering.</h1>
     <p>Your spot for The Show Up Everyday Series is saved.</p>
-    <a href="vip-offer.html" class="btn btn-primary btn-lg">Click Here to Join the WhatsApp Group</a>
+    <a href="vip-offer.html" id="join-whatsapp-link" class="btn btn-primary btn-lg">Click Here to Join the WhatsApp Group</a>
+  </div>
+</div>
+
+<!-- ANALYZING OVERLAY: shown for a few seconds after clicking through, before
+     landing on vip-offer.html. Purely perceived-value UX. -->
+<div class="analyzing-overlay" id="analyzing-overlay" role="status" aria-live="polite">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="analyzing-content">
+    <div class="analyzing-ring" aria-hidden="true"></div>
+    <h2 id="analyzing-message">Verifying your registration</h2>
+    <div class="analyzing-bar"><div class="analyzing-bar-fill" id="analyzing-bar-fill"></div></div>
   </div>
 </div>
 
@@ -32,6 +43,21 @@
   if (name) {
     document.getElementById('confirm-heading').textContent = `Thank you for registering, ${name}.`;
   }
+
+  const joinLink = document.getElementById('join-whatsapp-link');
+  joinLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    const destination = joinLink.getAttribute('href');
+    const messages = [
+      'Verifying your registration',
+      'Connecting to the WhatsApp group',
+      'Setting up your access',
+      'Almost there',
+    ];
+    runAnalyzingSequence(messages, 5000, () => {
+      window.location.href = destination;
+    });
+  });
 </script>
 </body>
 </html>
