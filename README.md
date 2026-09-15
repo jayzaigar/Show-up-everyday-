@@ -30,9 +30,28 @@ index.html (register: first name + email)
   product settings.**
 - `css/styles.css`: all styling: near-black + clay/terracotta + cream palette, grain-texture overlay, a
   thin ring/lens-mark motif in the hero, Playfair Display + Inter
+- `js/site.js`: shared behavior loaded on every page: forces new pages to open scrolled to the top
+  (fixes the browser landing mid-page after a click), fades sections in as you scroll past them, and
+  (on `vip-offer.html` only) gates the Keep Free Ticket / Upgrade to VIP buttons behind the VSL's last
+  10 seconds
 - `js/main.js`: client-side form validation + redirect to `confirmation.html`; payload is already shaped
   as `{ first_name, email }` to drop into most ESP/automation form-submission APIs
 - `images/sandra-hero.jpg`: no longer used on the page; kept in the repo in case it's needed again
+
+## The VSL-gated buttons on vip-offer.html
+
+The Keep Free Ticket / Upgrade to VIP buttons stay hidden (and unclickable) until the VSL reaches its
+last 10 seconds, then fade in. This is wired up in `js/site.js` against `<video id="vsl-video">` in
+`vip-offer.html`. Until a real `<source>` is added to that video, there's nothing to watch, so the
+buttons show immediately instead of waiting on a video that doesn't exist. Once you add the real VSL:
+
+1. In `vip-offer.html`, uncomment the `<source src="...">` line inside `#vsl-video` and point it at your
+   video file (or swap the whole `<video>` block for a YouTube/Vimeo/Wistia iframe if you're hosting it
+   there instead, in which case you'll want to adjust the gating logic in `js/site.js` to that platform's
+   player API).
+2. The placeholder overlay (`#vsl-placeholder`, the dashed box with the play icon) hides itself
+   automatically once a real `<source>` is present.
+3. The buttons will then stay hidden until 10 seconds before the video ends.
 
 ## Placeholders still to fill in
 
@@ -43,9 +62,9 @@ index.html (register: first name + email)
 - **VIP WhatsApp group link**: `join-whatsapp-vip.html`, the button's `href` is
   `[INSERT VIP WHATSAPP GROUP LINK]`.
 - **VIP ticket copy and VSL**: `vip-offer.html` has placeholder headline/body copy
-  (`[INSERT VIP TICKET HEADLINE]`, `[INSERT VIP TICKET OFFER DETAILS...]`) and a VSL placeholder block
-  (same pattern as the free page's hero) reserving space for the VIP pitch video. Swap in the real
-  headline, offer details, and video embed once you have them.
+  (`[INSERT VIP TICKET HEADLINE]`, `[INSERT VIP TICKET OFFER DETAILS...]`) and a VSL placeholder (see
+  above) reserving space for the VIP pitch video. Swap in the real headline, offer details, and video
+  once you have them.
 - **Free-series VSL video**: `index.html`'s hero photo slot is a placeholder (dashed border, play icon,
   "[VSL VIDEO PLACEHOLDER]" label). Swap the `.hero-media-placeholder` block for the real embed
   (YouTube/Vimeo/Wistia iframe, or a `<video>` tag) once that VSL is ready.

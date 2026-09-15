@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<noscript><style>.reveal, .path-choice { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }</style></noscript>
 </head>
 <body>
 
@@ -32,12 +33,20 @@
       </p>
     </div>
   </div>
-  <!-- VIP VSL PLACEHOLDER: swap this block for the real video embed once the VIP VSL is ready. -->
-  <div class="hero-media hero-media-placeholder">
-    <div class="play-badge" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6 4.5 17 11 6 17.5V4.5Z" fill="currentColor"/></svg>
+
+  <!-- VSL: add the real <source src="..."> below once the VIP VSL is ready. Once a source is
+       present, the placeholder overlay hides itself and the Keep Free Ticket / Upgrade to VIP
+       buttons stay hidden until the video's final 10 seconds (see js/site.js). -->
+  <div class="hero-media">
+    <video id="vsl-video" playsinline poster="">
+      <!-- <source src="[INSERT VIP VSL VIDEO URL]" type="video/mp4"> -->
+    </video>
+    <div class="hero-media-overlay" id="vsl-placeholder">
+      <div class="play-badge" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6 4.5 17 11 6 17.5V4.5Z" fill="currentColor"/></svg>
+      </div>
+      <span class="hero-media-label">[VIP VSL VIDEO PLACEHOLDER]</span>
     </div>
-    <span class="hero-media-label">[VIP VSL VIDEO PLACEHOLDER]</span>
   </div>
 </header>
 
@@ -46,7 +55,7 @@
   <!-- PATH CHOICE -->
   <section class="section section-alt" id="choose-path">
     <div class="grain" aria-hidden="true"></div>
-    <div class="container narrow center" style="position:relative; z-index:1;">
+    <div class="container narrow center reveal" style="position:relative; z-index:1;">
       <span class="eyebrow center">Your next step</span>
       <h2>Keep your free ticket, or upgrade to VIP</h2>
       <p class="section-intro">Either way, you're set for The Show Up Everyday Series. The choice is yours.</p>
@@ -65,5 +74,6 @@
   <p>&copy; SSELFIE.ai · The Show Up Everyday Series</p>
 </footer>
 
+<script src="js/site.js"></script>
 </body>
 </html>
