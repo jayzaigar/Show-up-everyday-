@@ -27,21 +27,61 @@ form.addEventListener('submit', async (event) => {
 
   const payload = { first_name: firstName, email };
 
-  try {
-    if (FORM_ENDPOINT) {
-      await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-    }
-  } catch (err) {
-    // Fail open: still send the visitor to the confirmation page.
-    console.error('Registration submit failed', err);
+  // Fire the actual submission in the background; it doesn't need to block
+  // the analyzing sequence below.
+  if (FORM_ENDPOINT) {
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch((err) => console.error('Registration submit failed', err));
   }
 
-  window.location.href = `confirmation.html?name=${encodeURIComponent(firstName)}`;
+  runAnalyzingSequence(() => {
+    window.location.href = `confirmation.html?name=${encodeURIComponent(firstName)}`;
+  });
 });
+
+// Perceived-value "analyzing" loading screen: nothing is actually being
+// analyzed, this is purely a few seconds of reassurance before the
+// confirmation page. See the .analyzing-overlay markup at the end of the
+// registration section.
+function runAnalyzingSequence(onDone) {
+  const overlay = document.getElementById('analyzing-overlay');
+  if (!overlay) { onDone(); return; }
+
+  const messageEl = document.getElementById('analyzing-message');
+  const barFill = document.getElementById('analyzing-bar-fill');
+  const messages = [
+    'Reviewing what you shared',
+    'Matching your answers to the right track',
+    'Personalizing your experience',
+    'Saving your spot',
+  ];
+  const totalDuration = 5000;
+  const stepDuration = totalDuration / messages.length;
+
+  overlay.classList.add('is-active');
+  // Force layout before adding the visible class, so the opacity transition runs.
+  overlay.getBoundingClientRect();
+  overlay.classList.add('is-visible');
+  barFill.getBoundingClientRect();
+  barFill.style.width = '100%';
+
+  let step = 0;
+  messageEl.textContent = messages[0];
+  const interval = setInterval(() => {
+    step += 1;
+    if (step < messages.length) {
+      messageEl.textContent = messages[step];
+    }
+  }, stepDuration);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    onDone();
+  }, totalDuration);
+}
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);

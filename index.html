@@ -163,6 +163,17 @@
     </div>
   </section>
 
+  <!-- ANALYZING OVERLAY: shown for a few seconds after submit, before redirecting to
+       confirmation.html. Purely perceived-value UX (nothing is actually being analyzed). -->
+  <div class="analyzing-overlay" id="analyzing-overlay" role="status" aria-live="polite">
+    <div class="grain" aria-hidden="true"></div>
+    <div class="analyzing-content">
+      <div class="analyzing-ring" aria-hidden="true"></div>
+      <h2 id="analyzing-message">Reviewing what you shared</h2>
+      <div class="analyzing-bar"><div class="analyzing-bar-fill" id="analyzing-bar-fill"></div></div>
+    </div>
+  </div>
+
   <!-- 6. SOCIAL PROOF (placeholder) -->
   <section class="section" id="proof">
     <div class="container narrow reveal">
