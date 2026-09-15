@@ -1,14 +1,14 @@
 # The Show Up Everyday Series — Landing Page
 
-A static, mobile-first registration landing page for the free 5-day live experience.
+A static, mobile-first registration landing page for the free 5-day live experience, styled to match the black / cream / editorial-serif look of sselfie.ai.
 
 ## Files
 
 - `index.html` — the landing page (hero, problem, transformation, 5-day breakdown, why-different, about, what-to-bring, registration form, FAQ, final CTA)
 - `confirmation.html` — post-registration page, links to the WhatsApp group
-- `css/styles.css` — all styling (light/dark aware, warm neutral palette)
+- `css/styles.css` — all styling: black + warm cream palette, Fraunces (display) + Inter (body), sharp-cornered buttons, hairline-divided lists — matching sselfie.ai's visual system
 - `js/main.js` — client-side form validation + redirect to `confirmation.html`
-- `images/` — placeholder SVGs for Sandra's photos
+- `images/sandra-hero.jpg`, `images/sandra-about.jpg` — cropped from screenshots of sselfie.ai supplied for this task; swap in final campaign photography before launch
 
 ## Before launch, fill in these placeholders
 
@@ -16,7 +16,7 @@ A static, mobile-first registration landing page for the free 5-day live experie
 - `[INSERT WHATSAPP LINK]` — in `confirmation.html` (Join the WhatsApp Group button)
 - `[INSERT RECORDING DETAILS]` — in `index.html` FAQ ("Will recordings be available?")
 - `[INSERT VERIFIED CREDENTIALS, CUSTOMER RESULTS OR APPROVED TESTIMONIAL]` — in `index.html` About section
-- Replace `images/sandra-hero.svg` and `images/sandra-about.svg` with real photos of Sandra (update the `src` attributes in `index.html` if you change file extensions)
+- Replace `images/sandra-hero.jpg` and `images/sandra-about.jpg` with final, full-resolution photos (the current ones are cropped from low-res screenshots)
 - Set `FORM_ENDPOINT` in `js/main.js` to your email/CRM provider's form submission endpoint so registrations are actually captured (currently the form just validates and redirects to the confirmation page)
 
 ## Local preview

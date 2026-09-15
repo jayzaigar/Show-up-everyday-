@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#f2ebe2"/>
-  <circle cx="400" cy="340" r="130" fill="#e4d9cb"/>
-  <rect x="230" y="500" width="340" height="220" rx="24" fill="#e4d9cb"/>
-  <text x="400" y="760" font-family="Inter, sans-serif" font-size="24" fill="#9a4f38" text-anchor="middle">
-    Replace with Sandra's photo (images/sandra-about.jpg or .svg)
-  </text>
-</svg>
