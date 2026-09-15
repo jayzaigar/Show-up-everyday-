@@ -253,7 +253,6 @@ a { color: inherit; }
 }
 .form-row { display: grid; gap: 8px; }
 .form-row label { font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--on-black-soft); }
-.optional { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--label-on-black); }
 
 input, textarea {
   font-family: var(--font-body);

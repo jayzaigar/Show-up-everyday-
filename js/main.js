@@ -10,14 +10,12 @@ form.addEventListener('submit', async (event) => {
 
   const firstName = form.first_name.value.trim();
   const email = form.email.value.trim();
-  const whatsapp = form.whatsapp.value.trim();
 
   clearErrors();
   let hasError = false;
 
   if (!firstName) hasError = showError(form.first_name, 'Please enter your first name.') || true;
   if (!isValidEmail(email)) hasError = showError(form.email, 'Please enter a valid email address.') || true;
-  if (!whatsapp) hasError = showError(form.whatsapp, 'Please enter your WhatsApp number.') || true;
 
   if (hasError) return;
 
@@ -25,12 +23,7 @@ form.addEventListener('submit', async (event) => {
   submitButton.disabled = true;
   submitButton.textContent = 'Saving your seat...';
 
-  const payload = {
-    first_name: firstName,
-    email,
-    whatsapp,
-    challenge: form.challenge.value.trim(),
-  };
+  const payload = { first_name: firstName, email };
 
   try {
     if (FORM_ENDPOINT) {
