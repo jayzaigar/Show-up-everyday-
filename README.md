@@ -13,11 +13,15 @@ near-black backgrounds, clay/terracotta accents, cream text, Playfair Display (d
   thin ring/lens-mark motif in the hero, Playfair Display + Inter
 - `js/main.js` — client-side form validation + redirect to `confirmation.html`; payload is already shaped
   as `{ first_name, email }` to drop into most ESP/automation form-submission APIs
-- `images/sandra-hero.jpg` — cropped from a screenshot supplied for an earlier design pass; swap in final
-  campaign photography before launch
+- `images/sandra-hero.jpg` — no longer used on the page (see VSL placeholder below); kept in the repo in
+  case it's needed again
 
 ## Placeholders still to fill in
 
+- **VSL video** — the hero's photo slot is now a placeholder (dashed border, play icon, "[VSL VIDEO
+  PLACEHOLDER]" label) reserving the space for the video sales letter. Swap the `.hero-media-placeholder`
+  block in `index.html` for the real embed (YouTube/Vimeo/Wistia iframe, or a `<video>` tag) once the VSL
+  is ready — the surrounding `.hero-media` container already has the right sizing/aspect-ratio.
 - **Headline** — three options are written out in an HTML comment at the top of `index.html`, above the
   hero. The first one is live; swap in a different one by editing the `<h1>`.
 - **`[TESTIMONIAL 1/2/3 — PENDING SANDRA APPROVAL]`** — in the "What it's like inside" section. Do not
