@@ -84,19 +84,45 @@
       <p class="section-intro">Either way, you're set for The Show Up Everyday Series. The choice is yours.</p>
 
       <div class="path-choice">
-        <a href="join-whatsapp-free.html" class="btn btn-outline btn-lg">Keep Free Ticket</a>
-        <!-- [REPLACE WITH YOUR WHOP CHECKOUT LINK] -->
-        <a href="[INSERT WHOP CHECKOUT LINK]" class="btn btn-primary btn-lg">Upgrade to VIP</a>
+        <a href="join-whatsapp-free.html" id="keep-free-link" class="btn btn-outline btn-lg">Keep Free Ticket</a>
+        <a href="https://whop.com/checkout/plan_d81AJ8Eqt1xcb" class="btn btn-primary btn-lg">Upgrade to VIP</a>
       </div>
     </div>
   </section>
 
 </main>
 
+<!-- ANALYZING OVERLAY: shown for a few seconds after choosing to keep the free
+     ticket, before landing on join-whatsapp-free.html. Purely perceived-value UX. -->
+<div class="analyzing-overlay" id="analyzing-overlay" role="status" aria-live="polite">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="analyzing-content">
+    <div class="analyzing-ring" aria-hidden="true"></div>
+    <h2 id="analyzing-message">Locking in your free ticket</h2>
+    <div class="analyzing-bar"><div class="analyzing-bar-fill" id="analyzing-bar-fill"></div></div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <p>&copy; SSELFIE.ai · The Show Up Everyday Series</p>
 </footer>
 
 <script src="js/site.js"></script>
+<script>
+  const keepFreeLink = document.getElementById('keep-free-link');
+  keepFreeLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    const destination = keepFreeLink.getAttribute('href');
+    const messages = [
+      'Locking in your free ticket',
+      'Setting up your access',
+      'Getting your group ready',
+      'Almost there',
+    ];
+    runAnalyzingSequence(messages, 5000, () => {
+      window.location.href = destination;
+    });
+  });
+</script>
 </body>
 </html>

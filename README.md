@@ -29,6 +29,10 @@ analyzed or verified.
 - **After clicking "Click Here to Join the WhatsApp Group"** (`confirmation.html`): "Verifying your
   registration" -> "Connecting to the WhatsApp group" -> "Setting up your access" -> "Almost there",
   then redirects to `vip-offer.html`.
+- **After clicking "Keep Free Ticket"** (`vip-offer.html`): "Locking in your free ticket" -> "Setting up
+  your access" -> "Getting your group ready" -> "Almost there", then redirects to
+  `join-whatsapp-free.html`. "Upgrade to VIP" skips this and goes straight to the Whop checkout, since
+  that's leaving the site for an external payment page.
 
 Both reuse the same `.analyzing-overlay` markup pattern and the shared `runAnalyzingSequence(messages,
 durationMs, onDone)` function in `js/site.js`. To add this to another transition, copy the
@@ -43,8 +47,8 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
 - `confirmation.html`: post-registration page ("Thank you for registering"), single button that runs a
   5-second "analyzing" loading screen before landing on `vip-offer.html`
 - `vip-offer.html`: the VIP ticket pitch, same hero/VSL-placeholder structure as `index.html`, with two
-  buttons: **Keep Free Ticket** (-> `join-whatsapp-free.html`) and **Upgrade to VIP** (-> your Whop
-  checkout link)
+  buttons: **Keep Free Ticket** (runs the analyzing loading screen, then -> `join-whatsapp-free.html`)
+  and **Upgrade to VIP** (-> your live Whop checkout link)
 - `join-whatsapp-free.html`: where free-ticket registrants land, with a button to the free WhatsApp group
 - `join-whatsapp-vip.html`: where VIP buyers land after Whop checkout, with a button to the VIP WhatsApp
   group. **This page's deployed URL is what you set as the "after purchase" redirect in your Whop VIP
@@ -77,8 +81,6 @@ buttons show immediately instead of waiting on a video that doesn't exist. Once 
 
 ## Placeholders still to fill in
 
-- **Whop checkout link**: `vip-offer.html`, the "Upgrade to VIP" button's `href` is
-  `[INSERT WHOP CHECKOUT LINK]`. Replace with your real Whop product checkout URL.
 - **Free WhatsApp group link**: `join-whatsapp-free.html`, the button's `href` is
   `[INSERT FREE WHATSAPP GROUP LINK]`.
 - **VIP WhatsApp group link**: `join-whatsapp-vip.html`, the button's `href` is
