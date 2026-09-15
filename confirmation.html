@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>You're In — The Show Up Everyday Series</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="confirm-wrap">
+  <div class="confirm-card">
+    <div class="confirm-icon">✓</div>
+    <h1 id="confirm-heading">Your seat is saved.</h1>
+    <p>
+      Check your email for the event details, then join the WhatsApp group below to receive the live links,
+      reminders and preparation instructions.
+    </p>
+    <a href="[INSERT WHATSAPP LINK]" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Join the WhatsApp Group</a>
+    <p class="microcopy" style="margin-top:18px;">
+      Didn't get the email? Check your spam folder or reach out — we'll make sure you're set up.
+    </p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p>&copy; SSELFIE.ai — The Show Up Everyday Series</p>
+</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  if (name) {
+    document.getElementById('confirm-heading').textContent = `You're in, ${name}. Your seat is saved.`;
+  }
+</script>
+</body>
+</html>
