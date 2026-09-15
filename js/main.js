@@ -1,5 +1,5 @@
 // Registration form handler.
-// This posts nowhere by default — set FORM_ENDPOINT to your automation
+// This posts nowhere by default. Set FORM_ENDPOINT to your automation
 // provider's webhook/form URL (e.g. Resend, ManyChat, or any ESP) before
 // going live. The payload below ({ first_name, email }) is already shaped
 // to drop straight into most providers' form-submission APIs.

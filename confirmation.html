@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>You're In — The Show Up Everyday Series</title>
+<title>You're In: The Show Up Everyday Series</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,26 +15,26 @@
 <div class="confirm-wrap">
   <div class="confirm-card">
     <div class="confirm-icon">You're in</div>
-    <h1 id="confirm-heading">You're in — check your email.</h1>
+    <h1 id="confirm-heading">You're in. Check your email.</h1>
     <p>
       We've sent your confirmation along with the WhatsApp group link. Join from there to get the live
       links, reminders and preparation instructions.
     </p>
     <p class="microcopy" style="margin-top:18px;">
-      Didn't get the email? Check your spam folder or reach out — we'll make sure you're set up.
+      Didn't get the email? Check your spam folder or reach out. We'll make sure you're set up.
     </p>
   </div>
 </div>
 
 <footer class="site-footer">
-  <p>&copy; SSELFIE.ai — The Show Up Everyday Series</p>
+  <p>&copy; SSELFIE.ai · The Show Up Everyday Series</p>
 </footer>
 
 <script>
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name');
   if (name) {
-    document.getElementById('confirm-heading').textContent = `You're in, ${name} — check your email.`;
+    document.getElementById('confirm-heading').textContent = `You're in, ${name}. Check your email.`;
   }
 </script>
 </body>
