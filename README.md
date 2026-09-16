@@ -7,15 +7,20 @@ Dark editorial look: near-black backgrounds, clay/terracotta accents, cream text
 ## The funnel
 
 ```
-index.html (register: first name + email)
+index.html (register: first name, email, WhatsApp number, reminder consent)
   -> [5s analyzing loading screen]
   -> confirmation.html ("Thank you for registering" + Click Here to Join the WhatsApp Group)
        -> [5s analyzing loading screen]
-       -> vip-offer.html (VIP pitch: hero + VSL placeholder + two paths)
-            -> Keep Free Ticket -> join-whatsapp-free.html -> free WhatsApp group link
-            -> Upgrade to VIP   -> Whop checkout -> (after purchase, Whop redirects to)
-                                    join-whatsapp-vip.html -> VIP WhatsApp group link
+       -> survey.html (7 quick questions, one at a time, under 2 minutes; skippable)
+            -> [5s analyzing loading screen]
+            -> vip-offer.html (VIP pitch: hero + VSL placeholder + two paths)
+                 -> Keep Free Ticket -> [5s analyzing loading screen] -> join-whatsapp-free.html
+                 -> Upgrade to VIP   -> Whop checkout -> (after purchase, Whop redirects to)
+                                         join-whatsapp-vip.html -> VIP WhatsApp group link
 ```
+
+The `name` from registration is carried through the URL (`?name=...`) across confirmation, survey and
+the VIP page, so it's available to personalize any of them further if you want.
 
 ## Analyzing loading screens
 
@@ -28,7 +33,10 @@ analyzed or verified.
   redirects to `confirmation.html`.
 - **After clicking "Click Here to Join the WhatsApp Group"** (`confirmation.html`): "Verifying your
   registration" -> "Connecting to the WhatsApp group" -> "Setting up your access" -> "Almost there",
-  then redirects to `vip-offer.html`.
+  then redirects to `survey.html`.
+- **After finishing (or skipping) the survey** (`survey.html`): "Analyzing your answers" -> "Matching
+  you to the right track" -> "Personalizing your VIP recommendation" -> "Almost there", then redirects
+  to `vip-offer.html`.
 - **After clicking "Keep Free Ticket"** (`vip-offer.html`): "Locking in your free ticket" -> "Setting up
   your access" -> "Getting your group ready" -> "Almost there", then redirects to
   `join-whatsapp-free.html`. "Upgrade to VIP" skips this and goes straight to the Whop checkout, since
@@ -45,7 +53,10 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
 - `index.html`: the free-series landing page: hero, who-this-is-for, five-day breakdown, why-free,
   registration form, social proof (placeholder), FAQ, final CTA
 - `confirmation.html`: post-registration page ("Thank you for registering"), single button that runs a
-  5-second "analyzing" loading screen before landing on `vip-offer.html`
+  5-second "analyzing" loading screen before landing on `survey.html`
+- `survey.html`: 7 quick multiple-choice questions, one at a time, with a progress bar, auto-advance on
+  selection, a Back button on the last question, and a "Skip this for now" link that's always available.
+  Finishing (or skipping) runs the analyzing loading screen, then lands on `vip-offer.html`.
 - `vip-offer.html`: the VIP ticket pitch, same hero/VSL-placeholder structure as `index.html`, with two
   buttons: **Keep Free Ticket** (runs the analyzing loading screen, then -> `join-whatsapp-free.html`)
   and **Upgrade to VIP** (-> your live Whop checkout link)
@@ -58,11 +69,27 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
 - `js/site.js`: shared behavior loaded on every page: forces new pages to open scrolled to the top
   (fixes the browser landing mid-page after a click), fades sections in as you scroll past them,
   (on `vip-offer.html` only) gates the Keep Free Ticket / Upgrade to VIP buttons behind the VSL's last
-  10 seconds, and provides the reusable `runAnalyzingSequence()` loading-screen sequence used on both
-  `index.html` (after submitting) and `confirmation.html` (after clicking through to the VIP page)
-- `js/main.js`: client-side form validation + redirect to `confirmation.html`; payload is already shaped
-  as `{ first_name, email }` to drop into most ESP/automation form-submission APIs
+  10 seconds, and provides the reusable `runAnalyzingSequence()` loading-screen sequence used across
+  `index.html`, `confirmation.html`, `survey.html` and `vip-offer.html`
+- `js/main.js`: client-side registration form validation + redirect to `confirmation.html`; payload is
+  `{ first_name, email, whatsapp, whatsapp_consent }` (whatsapp is the country code + number combined,
+  e.g. `+447911123456`), shaped to drop into most ESP/automation form-submission APIs
 - `images/sandra-hero.jpg`: no longer used on the page; kept in the repo in case it's needed again
+
+## The registration form
+
+Four fields only: first name, email, WhatsApp number (with a country-code dropdown covering ~50
+countries), and a required consent checkbox ("I agree to receive event reminders on WhatsApp"). The
+country code and number are combined into one `whatsapp` field in the submitted payload.
+
+## The survey
+
+Reachable only after registering (via confirmation.html), never as its own upfront ask, so it doesn't
+hurt the initial opt-in rate. All 7 questions are single-choice. Selecting an answer auto-advances to
+the next question after a short pause, except on the last question, where a "See My VIP Offer" button
+submits. A "Skip this for now" link is always visible so nobody gets stuck. No answers are sent
+anywhere yet, add a `SURVEY_ENDPOINT` fetch call in `survey.html`'s script (mirroring the pattern in
+`js/main.js`) if you want to capture them.
 
 ## The VSL-gated buttons on vip-offer.html
 

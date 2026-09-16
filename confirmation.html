@@ -17,7 +17,7 @@
     <div class="confirm-icon">You're in</div>
     <h1 id="confirm-heading">Thank you for registering.</h1>
     <p>Your spot for The Show Up Everyday Series is saved.</p>
-    <a href="vip-offer.html" id="join-whatsapp-link" class="btn btn-primary btn-lg">Click Here to Join the WhatsApp Group</a>
+    <a href="survey.html" id="join-whatsapp-link" class="btn btn-primary btn-lg">Click Here to Join the WhatsApp Group</a>
   </div>
 </div>
 
@@ -47,7 +47,8 @@
   const joinLink = document.getElementById('join-whatsapp-link');
   joinLink.addEventListener('click', (event) => {
     event.preventDefault();
-    const destination = joinLink.getAttribute('href');
+    const base = joinLink.getAttribute('href');
+    const destination = name ? `${base}?name=${encodeURIComponent(name)}` : base;
     const messages = [
       'Verifying your registration',
       'Connecting to the WhatsApp group',

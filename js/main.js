@@ -1,23 +1,30 @@
 // Registration form handler.
 // This posts nowhere by default. Set FORM_ENDPOINT to your automation
 // provider's webhook/form URL (e.g. Resend, ManyChat, or any ESP) before
-// going live. The payload below ({ first_name, email }) is already shaped
-// to drop straight into most providers' form-submission APIs.
+// going live. The payload below is already shaped to drop straight into
+// most providers' form-submission APIs.
 const FORM_ENDPOINT = '';
 
 const form = document.getElementById('register-form');
+const phoneGroup = form.querySelector('.phone-group');
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const firstName = form.first_name.value.trim();
   const email = form.email.value.trim();
+  const whatsappCode = form.whatsapp_country_code.value;
+  const whatsappNumber = form.whatsapp_number.value.trim();
+  const consent = form.whatsapp_consent.checked;
 
   clearErrors();
   let hasError = false;
 
   if (!firstName) hasError = showError(form.first_name, 'Please enter your first name.') || true;
   if (!isValidEmail(email)) hasError = showError(form.email, 'Please enter a valid email address.') || true;
+  if (!whatsappCode) hasError = showError(phoneGroup, 'Please select your country code.') || true;
+  else if (!whatsappNumber) hasError = showError(phoneGroup, 'Please enter your WhatsApp number.') || true;
+  if (!consent) hasError = showError(form.querySelector('.consent-row'), 'Please confirm you agree to receive reminders on WhatsApp.') || true;
 
   if (hasError) return;
 
@@ -25,7 +32,12 @@ form.addEventListener('submit', async (event) => {
   submitButton.disabled = true;
   submitButton.textContent = 'Saving your spot...';
 
-  const payload = { first_name: firstName, email };
+  const payload = {
+    first_name: firstName,
+    email,
+    whatsapp: `${whatsappCode}${whatsappNumber}`,
+    whatsapp_consent: consent,
+  };
 
   // Fire the actual submission in the background; it doesn't need to block
   // the analyzing sequence below.

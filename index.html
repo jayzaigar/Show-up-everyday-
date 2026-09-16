@@ -157,6 +157,69 @@
           <label for="email">Email address</label>
           <input type="email" id="email" name="email" autocomplete="email" required>
         </div>
+        <div class="form-row">
+          <label for="whatsapp-number">WhatsApp number</label>
+          <div class="phone-group">
+            <select id="whatsapp-code" name="whatsapp_country_code" autocomplete="tel-country-code" required>
+              <option value="" disabled selected>Code</option>
+              <option value="+1">+1 &middot; US/Canada</option>
+              <option value="+44">+44 &middot; UK</option>
+              <option value="+353">+353 &middot; Ireland</option>
+              <option value="+61">+61 &middot; Australia</option>
+              <option value="+64">+64 &middot; New Zealand</option>
+              <option value="+91">+91 &middot; India</option>
+              <option value="+27">+27 &middot; South Africa</option>
+              <option value="+971">+971 &middot; UAE</option>
+              <option value="+966">+966 &middot; Saudi Arabia</option>
+              <option value="+65">+65 &middot; Singapore</option>
+              <option value="+852">+852 &middot; Hong Kong</option>
+              <option value="+60">+60 &middot; Malaysia</option>
+              <option value="+63">+63 &middot; Philippines</option>
+              <option value="+49">+49 &middot; Germany</option>
+              <option value="+33">+33 &middot; France</option>
+              <option value="+34">+34 &middot; Spain</option>
+              <option value="+39">+39 &middot; Italy</option>
+              <option value="+31">+31 &middot; Netherlands</option>
+              <option value="+32">+32 &middot; Belgium</option>
+              <option value="+41">+41 &middot; Switzerland</option>
+              <option value="+43">+43 &middot; Austria</option>
+              <option value="+46">+46 &middot; Sweden</option>
+              <option value="+47">+47 &middot; Norway</option>
+              <option value="+45">+45 &middot; Denmark</option>
+              <option value="+358">+358 &middot; Finland</option>
+              <option value="+351">+351 &middot; Portugal</option>
+              <option value="+30">+30 &middot; Greece</option>
+              <option value="+48">+48 &middot; Poland</option>
+              <option value="+420">+420 &middot; Czech Republic</option>
+              <option value="+36">+36 &middot; Hungary</option>
+              <option value="+40">+40 &middot; Romania</option>
+              <option value="+380">+380 &middot; Ukraine</option>
+              <option value="+90">+90 &middot; Turkey</option>
+              <option value="+972">+972 &middot; Israel</option>
+              <option value="+20">+20 &middot; Egypt</option>
+              <option value="+234">+234 &middot; Nigeria</option>
+              <option value="+254">+254 &middot; Kenya</option>
+              <option value="+55">+55 &middot; Brazil</option>
+              <option value="+52">+52 &middot; Mexico</option>
+              <option value="+54">+54 &middot; Argentina</option>
+              <option value="+57">+57 &middot; Colombia</option>
+              <option value="+56">+56 &middot; Chile</option>
+              <option value="+51">+51 &middot; Peru</option>
+              <option value="+81">+81 &middot; Japan</option>
+              <option value="+82">+82 &middot; South Korea</option>
+              <option value="+86">+86 &middot; China</option>
+              <option value="+66">+66 &middot; Thailand</option>
+              <option value="+62">+62 &middot; Indonesia</option>
+              <option value="+84">+84 &middot; Vietnam</option>
+              <option value="+7">+7 &middot; Russia</option>
+            </select>
+            <input type="tel" id="whatsapp-number" name="whatsapp_number" autocomplete="tel-national" placeholder="Phone number" required>
+          </div>
+        </div>
+        <label class="consent-row" for="whatsapp-consent">
+          <input type="checkbox" id="whatsapp-consent" name="whatsapp_consent" required>
+          <span>I agree to receive event reminders on WhatsApp.</span>
+        </label>
         <button type="submit" class="btn btn-primary btn-lg btn-full">Save My Spot</button>
         <p class="form-note">No spam. You'll get a confirmation email right away.</p>
       </form>
