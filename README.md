@@ -67,10 +67,13 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
 - `css/styles.css`: all styling: near-black + clay/terracotta + cream palette, grain-texture overlay, a
   thin ring/lens-mark motif in the hero, Playfair Display + Inter
 - `js/site.js`: shared behavior loaded on every page: forces new pages to open scrolled to the top
-  (fixes the browser landing mid-page after a click), fades sections in as you scroll past them,
-  (on `vip-offer.html` only) gates the Keep Free Ticket / Upgrade to VIP buttons behind the VSL's last
-  10 seconds, and provides the reusable `runAnalyzingSequence()` loading-screen sequence used across
-  `index.html`, `confirmation.html`, `survey.html` and `vip-offer.html`
+  (fixes the browser landing mid-page after a click), fades sections and individual cards/list items in
+  as you scroll to them (each `.reveal` element animates independently via IntersectionObserver; items
+  sharing a parent, like the day cards or FAQ entries, get a small incremental delay so they cascade in
+  one after another instead of popping in all at once), (on `vip-offer.html` only) gates the Keep Free
+  Ticket / Upgrade to VIP buttons behind the VSL's last 10 seconds, and provides the reusable
+  `runAnalyzingSequence()` loading-screen sequence used across `index.html`, `confirmation.html`,
+  `survey.html` and `vip-offer.html`
 - `js/main.js`: client-side registration form validation + redirect to `confirmation.html`; payload is
   `{ first_name, email, whatsapp, whatsapp_consent }` (whatsapp is the country code + number combined,
   e.g. `+447911123456`), shaped to drop into most ESP/automation form-submission APIs

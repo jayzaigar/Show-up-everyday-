@@ -42,9 +42,24 @@ window.scrollTo(0, 0);
 window.addEventListener('pageshow', () => window.scrollTo(0, 0));
 
 // Fade-up reveal for any element marked .reveal as it scrolls into view.
+// Elements that share a direct parent (cards in the same list/grid, FAQ
+// items, etc.) get a small incremental delay so they cascade in one after
+// another instead of all popping in at once.
 const revealEls = document.querySelectorAll('.reveal');
 if (revealEls.length) {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const groups = new Map();
+  revealEls.forEach((el) => {
+    const parent = el.parentElement;
+    if (!groups.has(parent)) groups.set(parent, []);
+    groups.get(parent).push(el);
+  });
+  groups.forEach((els) => {
+    els.forEach((el, i) => {
+      el.style.transitionDelay = `${Math.min(i, 6) * 90}ms`;
+    });
+  });
 
   if (prefersReducedMotion || !('IntersectionObserver' in window)) {
     revealEls.forEach((el) => el.classList.add('is-visible'));

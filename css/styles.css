@@ -322,7 +322,7 @@ a { color: inherit; }
   padding: 18px 22px;
   color: var(--cream-dim);
   border-radius: 2px;
-  transition: transform .35s var(--ease), border-color .35s ease, box-shadow .35s ease;
+  transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .35s ease, box-shadow .35s ease;
 }
 .who-for-list li strong { display: block; color: var(--cream); margin-bottom: 4px; }
 .who-for-list li:hover {
@@ -347,7 +347,7 @@ a { color: inherit; }
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 2px;
-  transition: transform .35s var(--ease), border-color .35s ease, box-shadow .35s ease;
+  transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .35s ease, box-shadow .35s ease;
 }
 .day-card:hover {
   transform: translateY(-4px);
@@ -537,7 +537,7 @@ select:invalid { color: var(--taupe-dim); }
   border: 1px solid var(--line);
   border-radius: 2px;
   padding: 24px 22px;
-  transition: transform .35s var(--ease), border-color .35s ease, box-shadow .35s ease;
+  transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .35s ease, box-shadow .35s ease;
 }
 .proof-card:hover {
   transform: translateY(-4px);
