@@ -20,25 +20,53 @@
   don't link to it from anywhere public.
 -->
 
-<header class="section" style="padding-block: 48px 12px;">
-  <div class="container narrow center">
-    <span class="eyebrow center">Internal</span>
-    <h1>Registrations dashboard</h1>
-    <p class="subhead">Everyone who's registered for The Show Up Everyday Series. Refreshes automatically every 30 seconds.</p>
-    <div class="dash-refresh" id="dash-refresh">
-      <span class="dash-refresh-dot" aria-hidden="true"></span>
-      <span id="dash-refresh-text">Loading&hellip;</span>
-    </div>
+<!--
+  LOGIN GATE: client-side only, since this is a static site with no server.
+  This stops a casual visitor who finds the link, it is NOT real security,
+  the username/password check below runs in this page's own JavaScript, so
+  anyone who opens dev tools or views source can read it directly. See the
+  README for the tradeoffs.
+-->
+<div id="dash-login" class="confirm-wrap">
+  <div class="confirm-card">
+    <div class="confirm-icon">Internal</div>
+    <h1>Sign in</h1>
+    <p>This dashboard is restricted to Jay and Sandra.</p>
+    <form id="dash-login-form" class="register-form" novalidate>
+      <div class="form-row">
+        <label for="dash-username">Username</label>
+        <input type="text" id="dash-username" autocomplete="username" required>
+      </div>
+      <div class="form-row">
+        <label for="dash-password">Password</label>
+        <input type="password" id="dash-password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg btn-full">Enter</button>
+    </form>
   </div>
-</header>
+</div>
 
-<main class="container" style="padding-block: 20px 60px;">
-  <div id="dash-root"></div>
-</main>
+<div id="dash-content" style="display: none;">
+  <header class="section" style="padding-block: 48px 12px;">
+    <div class="container narrow center">
+      <span class="eyebrow center">Internal</span>
+      <h1>Registrations dashboard</h1>
+      <p class="subhead">Everyone who's registered for The Show Up Everyday Series. Refreshes automatically every 30 seconds.</p>
+      <div class="dash-refresh" id="dash-refresh">
+        <span class="dash-refresh-dot" aria-hidden="true"></span>
+        <span id="dash-refresh-text">Loading&hellip;</span>
+      </div>
+    </div>
+  </header>
 
-<footer class="site-footer">
-  <p>&copy; SSELFIE.ai &middot; The Show Up Everyday Series</p>
-</footer>
+  <main class="container" style="padding-block: 20px 60px;">
+    <div id="dash-root"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; SSELFIE.ai &middot; The Show Up Everyday Series &middot; <a href="#" id="dash-logout" style="text-decoration: underline;">Log out</a></p>
+  </footer>
+</div>
 
 <script>
   // A separate, read-only Personal Access Token (scope: data.records:read,
@@ -219,13 +247,69 @@
     }
   }
 
-  if (AIRTABLE_BASE_ID && AIRTABLE_TABLE_NAME && AIRTABLE_READ_TOKEN) {
-    load();
-    setInterval(load, REFRESH_MS);
-    setInterval(tickRefreshLabel, 1000);
+  function startDashboard() {
+    if (AIRTABLE_BASE_ID && AIRTABLE_TABLE_NAME && AIRTABLE_READ_TOKEN) {
+      load();
+      setInterval(load, REFRESH_MS);
+      setInterval(tickRefreshLabel, 1000);
+    } else {
+      root.innerHTML = '<div class="dash-empty">Not set up yet. Create a read-only Personal Access Token (scope: data.records:read, restricted to your base) and paste your Base ID, table ID, and token into the constants near the top of dashboard.html’s script. See the README’s "Registrations dashboard" section.</div>';
+      refreshText.textContent = 'Not configured';
+    }
+  }
+
+  // ---------- Login gate (see the notice in the HTML above) ----------
+  const VALID_LOGINS = { jay: 'AI2026', sandra: 'AI2026' };
+  const AUTH_KEY = 'dash-authed';
+
+  const loginScreen = document.getElementById('dash-login');
+  const contentScreen = document.getElementById('dash-content');
+  const loginForm = document.getElementById('dash-login-form');
+  const logoutLink = document.getElementById('dash-logout');
+
+  function showContent() {
+    loginScreen.style.display = 'none';
+    contentScreen.style.display = '';
+    startDashboard();
+  }
+
+  function showLogin() {
+    contentScreen.style.display = 'none';
+    loginScreen.style.display = '';
+  }
+
+  function showLoginError(message) {
+    const existing = document.getElementById('dash-login-error');
+    if (existing) existing.remove();
+    const error = document.createElement('p');
+    error.id = 'dash-login-error';
+    error.className = 'form-error';
+    error.textContent = message;
+    loginForm.appendChild(error);
+  }
+
+  loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const username = document.getElementById('dash-username').value.trim().toLowerCase();
+    const password = document.getElementById('dash-password').value;
+    if (VALID_LOGINS[username] && VALID_LOGINS[username] === password) {
+      localStorage.setItem(AUTH_KEY, 'true');
+      showContent();
+    } else {
+      showLoginError('Incorrect username or password.');
+    }
+  });
+
+  logoutLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    localStorage.removeItem(AUTH_KEY);
+    window.location.reload();
+  });
+
+  if (localStorage.getItem(AUTH_KEY) === 'true') {
+    showContent();
   } else {
-    root.innerHTML = '<div class="dash-empty">Not set up yet. Create a read-only Personal Access Token (scope: data.records:read, restricted to your base) and paste your Base ID, table ID, and token into the constants near the top of dashboard.html’s script. See the README’s "Registrations dashboard" section.</div>';
-    refreshText.textContent = 'Not configured';
+    showLogin();
   }
 </script>
 </body>
