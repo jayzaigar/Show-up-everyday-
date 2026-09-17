@@ -722,6 +722,7 @@ details p {
   color: var(--clay-light);
 }
 .confirm-card p { color: var(--taupe); }
+.confirm-actions { display: grid; gap: 14px; margin-top: 4px; }
 
 /* ---------- Footer ---------- */
 .site-footer {

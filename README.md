@@ -61,8 +61,10 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
   buttons: **Keep Free Ticket** (runs the analyzing loading screen, then -> `join-whatsapp-free.html`)
   and **Upgrade to VIP** (-> your live Whop checkout link)
 - `join-whatsapp-free.html`: where free-ticket registrants land, with a button to the free WhatsApp group
-- `join-whatsapp-vip.html`: where VIP buyers land after Whop checkout, with a button to the VIP WhatsApp
-  group. **This page's deployed URL is what you set as the "after purchase" redirect in your Whop VIP
+- `join-whatsapp-vip.html`: where VIP buyers land after Whop checkout. Thanks them, explains that
+  everything they paid for is already waiting inside Whop (download the app or use a browser, log in
+  with the email they paid with), and gives two buttons: **Open Whop** and **Join the VIP WhatsApp
+  Group**. **This page's deployed URL is what you set as the "after purchase" redirect in your Whop VIP
   product settings.**
 - `css/styles.css`: all styling: near-black + clay/terracotta + cream palette, grain-texture overlay, a
   thin ring/lens-mark motif in the hero, Playfair Display + Inter
