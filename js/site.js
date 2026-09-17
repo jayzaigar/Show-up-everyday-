@@ -4,9 +4,9 @@
 // Fill these in once you've created your Airtable base (see README's
 // "Registrations dashboard" section). Left empty, nothing is ever sent and
 // the funnel behaves exactly as it did before.
-const AIRTABLE_BASE_ID = '';
-const AIRTABLE_TABLE_NAME = 'Registrants';
-const AIRTABLE_TOKEN = '';
+const AIRTABLE_BASE_ID = 'appiomSorktNJKzAK';
+const AIRTABLE_TABLE_NAME = 'tblKK43dOhOtkMdaF';
+const AIRTABLE_TOKEN = 'patpQwVflHZZQdqjR.ee8e95e90823723bea5189b686216e94afafca2de6498f1497bd55d801516a48';
 
 // Creates a record (no recordId) or patches one (with recordId). Never
 // throws and never blocks the funnel: on any failure or timeout it just
