@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: show-up-everyday-series
+    env: static
+    buildCommand: ""
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
