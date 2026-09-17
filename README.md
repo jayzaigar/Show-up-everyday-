@@ -71,8 +71,9 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
   with the email they paid with), and gives two buttons: **Open Whop** and **Join the VIP WhatsApp
   Group**. **This page's deployed URL is what you set as the "after purchase" redirect in your Whop VIP
   product settings.**
-- `dashboard.html`: internal, unlisted page (not part of the funnel) that embeds your Airtable
-  registrants view, see "Registrations dashboard" below
+- `dashboard.html`: internal, unlisted page (not part of the funnel), a custom stat-tile + filterable
+  table view of your registrants, styled to match the site and polling Airtable every 30 seconds, see
+  "Registrations dashboard" below
 - `css/styles.css`: all styling: strict near-black + cream + warm-gray palette (no gradients, glow,
   grain or color accents), a thin hairline ring motif in the hero, Instrument Serif + Inter
 - `js/site.js`: shared behavior loaded on every page: forces new pages to open scrolled to the top
@@ -153,11 +154,24 @@ one-time setup:
    front-end code. That's exactly why step 4 scopes it to `data.records:write` only, with that scope,
    even if someone found it in their browser's dev tools, the most they could do is create junk rows,
    they could not read, edit, or delete your registrants' data.
-8. For the dashboard: in the `Registrants` table, set up a view however you like (group by `Country`,
-   or add a filter like `VIP` is checked for a VIP-only view). Click "Share view" (top right) -> turn on
-   "Anyone with the link can view this view" -> copy the link.
-9. Open `dashboard.html`, find `const AIRTABLE_SHARE_VIEW_URL = '';` near the bottom, and paste that
-   link in.
+8. For the dashboard: `dashboard.html` is a custom page (built in the site's own black/white/warm-gray
+   look, not an embedded Airtable view) that polls Airtable directly every 30 seconds and renders stat
+   tiles (total, VIP, free, countries reached), a country breakdown, and a filterable/searchable table.
+   It needs its own **read-only** Personal Access Token, separate from the write-only one in
+   `js/site.js`: repeat step 4, but scope this one to `data.records:read` only. Keeping it separate
+   means read access to registrant PII is confined to this one unlisted page instead of every public
+   page of the funnel.
+9. Open `dashboard.html`, find near the top of its script:
+   ```js
+   const AIRTABLE_BASE_ID = '';
+   const AIRTABLE_TABLE_NAME = '';
+   const AIRTABLE_READ_TOKEN = '';
+   const AIRTABLE_OPEN_URL = ''; // optional: a Share view link, for the "Open in Airtable" fallback
+   ```
+   Paste in the same Base ID and table ID you used in `js/site.js`, and your new read-only token.
+   `AIRTABLE_OPEN_URL` is optional, if you want a link out to the real Airtable base too (see its own
+   "Share view" button in Airtable if you want that), it's just a convenience, not required for the
+   dashboard to work.
 10. That dashboard page has no login of its own, just an unlisted, `noindex` URL. Don't link to it from
     anywhere public, and only share the link with people who should see registrant PII (names, emails,
     phone numbers).

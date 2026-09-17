@@ -13,24 +13,27 @@
 <body>
 
 <!--
-  INTERNAL PAGE, not part of the funnel. Shows a live embed of your Airtable
-  "Registrants" view. See the README's "Registrations dashboard" section
-  for how to set up Airtable and where to paste your share-view link below.
-  This page has no login of its own, only an unlisted URL, so don't link to
-  it from anywhere public.
+  INTERNAL PAGE, not part of the funnel. Polls Airtable every 30s and
+  renders registrants in the site's own look, instead of embedding
+  Airtable's UI. See the README's "Registrations dashboard" section for
+  setup. This page has no login of its own, only an unlisted URL, so
+  don't link to it from anywhere public.
 -->
 
 <header class="section" style="padding-block: 48px 12px;">
   <div class="container narrow center">
     <span class="eyebrow center">Internal</span>
     <h1>Registrations dashboard</h1>
-    <p class="subhead">Everyone who's registered for The Show Up Everyday Series, live from Airtable. Filter or group by Country or VIP directly inside the embed below.</p>
+    <p class="subhead">Everyone who's registered for The Show Up Everyday Series. Refreshes automatically every 30 seconds.</p>
+    <div class="dash-refresh" id="dash-refresh">
+      <span class="dash-refresh-dot" aria-hidden="true"></span>
+      <span id="dash-refresh-text">Loading&hellip;</span>
+    </div>
   </div>
 </header>
 
 <main class="container" style="padding-block: 20px 60px;">
-  <div id="dashboard-embed" style="border: 1px solid var(--line); min-height: 70vh;"></div>
-  <p class="microcopy center" id="dashboard-open-link" style="margin-top: 16px;"></p>
+  <div id="dash-root"></div>
 </main>
 
 <footer class="site-footer">
@@ -38,35 +41,191 @@
 </footer>
 
 <script>
-  // Paste your Airtable "Share view" link here (see the README). Left
-  // empty, this page shows setup instructions instead of a broken embed.
-  const AIRTABLE_SHARE_VIEW_URL = 'https://airtable.com/appiomSorktNJKzAK/shrDqD9WAmGyOOrTA';
+  // A separate, read-only Personal Access Token (scope: data.records:read,
+  // restricted to this one base). This is deliberately NOT the same token
+  // used in js/site.js: that one is write-only so it's safe to expose on
+  // every public funnel page. This page needs read access to show
+  // registrants, so that access is confined to just this one unlisted page
+  // rather than every visitor of the public site. See the README.
+  const AIRTABLE_BASE_ID = 'appiomSorktNJKzAK';
+  const AIRTABLE_TABLE_NAME = 'tblKK43dOhOtkMdaF';
+  const AIRTABLE_READ_TOKEN = '';
+  const AIRTABLE_OPEN_URL = 'https://airtable.com/appiomSorktNJKzAK/shrDqD9WAmGyOOrTA'; // optional: your Airtable "Share view" link, for the "Open in Airtable" fallback
 
-  const embed = document.getElementById('dashboard-embed');
-  const openLink = document.getElementById('dashboard-open-link');
+  const REFRESH_MS = 30000;
 
-  if (AIRTABLE_SHARE_VIEW_URL) {
-    // Airtable blocks framing of the plain share link (clickjacking
-    // protection); the /embed/ variant is the one built for iframes.
-    const embedUrl = AIRTABLE_SHARE_VIEW_URL.replace('airtable.com/', 'airtable.com/embed/');
-    const iframe = document.createElement('iframe');
-    iframe.src = embedUrl;
-    iframe.loading = 'lazy';
-    iframe.style.width = '100%';
-    iframe.style.height = '75vh';
-    iframe.style.border = '0';
-    iframe.style.background = 'var(--bg-alt)';
-    embed.appendChild(iframe);
+  const root = document.getElementById('dash-root');
+  const refreshText = document.getElementById('dash-refresh-text');
 
-    const link = document.createElement('a');
-    link.href = AIRTABLE_SHARE_VIEW_URL;
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.style.textDecoration = 'underline';
-    link.textContent = 'Open the full view in Airtable';
-    openLink.appendChild(link);
+  let allRecords = [];
+  let lastFetchAt = null;
+  let filterCountry = '';
+  let filterTier = 'all'; // all | vip | free
+  let filterSearch = '';
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+  }
+
+  async function fetchAllRecords() {
+    const records = [];
+    let offset = null;
+    do {
+      const url = new URL(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`);
+      url.searchParams.set('pageSize', '100');
+      if (offset) url.searchParams.set('offset', offset);
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}` },
+      });
+      if (!res.ok) throw new Error(`Airtable responded ${res.status}`);
+      const data = await res.json();
+      records.push(...data.records);
+      offset = data.offset || null;
+    } while (offset);
+    return records;
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) +
+      ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function render() {
+    const total = allRecords.length;
+    const vipCount = allRecords.filter((r) => !!r.fields.VIP).length;
+    const freeCount = total - vipCount;
+
+    const countryCounts = new Map();
+    allRecords.forEach((r) => {
+      const c = (r.fields.Country || 'Unknown').trim() || 'Unknown';
+      countryCounts.set(c, (countryCounts.get(c) || 0) + 1);
+    });
+    const sortedCountries = Array.from(countryCounts.entries()).sort((a, b) => b[1] - a[1]);
+
+    let filtered = allRecords;
+    if (filterCountry) filtered = filtered.filter((r) => (r.fields.Country || 'Unknown').trim() === filterCountry);
+    if (filterTier === 'vip') filtered = filtered.filter((r) => !!r.fields.VIP);
+    if (filterTier === 'free') filtered = filtered.filter((r) => !r.fields.VIP);
+    if (filterSearch) {
+      const q = filterSearch.toLowerCase();
+      filtered = filtered.filter((r) => {
+        const name = (r.fields['First Name'] || '').toLowerCase();
+        const email = (r.fields.Email || '').toLowerCase();
+        return name.includes(q) || email.includes(q);
+      });
+    }
+    filtered = filtered.slice().sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+
+    const countryOptions = ['<option value="">All countries</option>']
+      .concat(sortedCountries.map(([c]) => `<option value="${escapeHtml(c)}"${c === filterCountry ? ' selected' : ''}>${escapeHtml(c)}</option>`))
+      .join('');
+
+    const rows = filtered.map((r) => {
+      const f = r.fields;
+      const isVip = !!f.VIP;
+      return `
+        <tr>
+          <td class="dash-col-name">${escapeHtml(f['First Name'] || '')}</td>
+          <td>${escapeHtml(f.Email || '')}</td>
+          <td>${escapeHtml(f.WhatsApp || '')}</td>
+          <td>${escapeHtml(f.Country || '')}</td>
+          <td class="${isVip ? 'dash-status-vip' : 'dash-status-free'}">${isVip ? 'VIP' : 'Free'}</td>
+          <td title="${escapeHtml(f.Q1 || '')}">${escapeHtml(f.Q1 || '')}</td>
+          <td title="${escapeHtml(f.Q4 || '')}">${escapeHtml(f.Q4 || '')}</td>
+          <td>${escapeHtml(formatDate(r.createdTime))}</td>
+        </tr>`;
+    }).join('');
+
+    root.innerHTML = `
+      <div class="dash-stats">
+        <div class="dash-stat"><span class="dash-stat-label">Total registrations</span><span class="dash-stat-value">${total}</span></div>
+        <div class="dash-stat"><span class="dash-stat-label">VIP</span><span class="dash-stat-value">${vipCount}</span></div>
+        <div class="dash-stat"><span class="dash-stat-label">Free</span><span class="dash-stat-value">${freeCount}</span></div>
+        <div class="dash-stat"><span class="dash-stat-label">Countries reached</span><span class="dash-stat-value">${countryCounts.size}</span></div>
+      </div>
+
+      ${sortedCountries.length ? `
+        <div class="dash-countries">
+          ${sortedCountries.map(([c, n]) => `<div class="dash-country-row"><span>${escapeHtml(c)}</span><strong>${n}</strong></div>`).join('')}
+        </div>
+      ` : ''}
+
+      <div class="dash-controls">
+        <div class="dash-filter-row">
+          <select id="dash-country-filter">${countryOptions}</select>
+          <div class="dash-toggle-group">
+            <button type="button" class="dash-toggle${filterTier === 'all' ? ' is-active' : ''}" data-tier="all">All</button>
+            <button type="button" class="dash-toggle${filterTier === 'vip' ? ' is-active' : ''}" data-tier="vip">VIP</button>
+            <button type="button" class="dash-toggle${filterTier === 'free' ? ' is-active' : ''}" data-tier="free">Free</button>
+          </div>
+          <input type="search" id="dash-search" placeholder="Search name or email" value="${escapeHtml(filterSearch)}">
+          ${AIRTABLE_OPEN_URL ? `<a href="${escapeHtml(AIRTABLE_OPEN_URL)}" target="_blank" rel="noopener" class="microcopy" style="text-decoration: underline; margin-left: auto;">Open in Airtable</a>` : ''}
+        </div>
+      </div>
+
+      ${filtered.length ? `
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Email</th><th>WhatsApp</th><th>Country</th><th>Tier</th>
+                <th>Q1: describes them</th><th>Q4: goal for the 5 days</th><th>Registered</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      ` : `<div class="dash-empty">No registrants match this filter yet.</div>`}
+    `;
+
+    document.getElementById('dash-country-filter').addEventListener('change', (e) => {
+      filterCountry = e.target.value;
+      render();
+    });
+    document.getElementById('dash-search').addEventListener('input', (e) => {
+      filterSearch = e.target.value;
+      render();
+    });
+    root.querySelectorAll('.dash-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterTier = btn.dataset.tier;
+        render();
+      });
+    });
+  }
+
+  function tickRefreshLabel() {
+    if (!lastFetchAt) return;
+    const secs = Math.round((Date.now() - lastFetchAt) / 1000);
+    refreshText.textContent = secs < 5 ? 'Updated just now' : `Updated ${secs}s ago`;
+  }
+
+  async function load() {
+    try {
+      allRecords = await fetchAllRecords();
+      lastFetchAt = Date.now();
+      render();
+      tickRefreshLabel();
+    } catch (err) {
+      console.error('Dashboard fetch failed', err);
+      if (!allRecords.length) {
+        root.innerHTML = '<div class="dash-error">Could not load registrants. Check the console for details, and that your read-only token and base/table IDs in dashboard.html are correct.</div>';
+      }
+      refreshText.textContent = 'Update failed, showing last known data';
+    }
+  }
+
+  if (AIRTABLE_BASE_ID && AIRTABLE_TABLE_NAME && AIRTABLE_READ_TOKEN) {
+    load();
+    setInterval(load, REFRESH_MS);
+    setInterval(tickRefreshLabel, 1000);
   } else {
-    embed.innerHTML = '<p class="microcopy" style="padding: 40px; text-align: center;">Not set up yet. Create your Airtable base (see the README’s "Registrations dashboard" section), then paste your share-view link into AIRTABLE_SHARE_VIEW_URL near the bottom of dashboard.html.</p>';
+    root.innerHTML = '<div class="dash-empty">Not set up yet. Create a read-only Personal Access Token (scope: data.records:read, restricted to your base) and paste your Base ID, table ID, and token into the constants near the top of dashboard.html’s script. See the README’s "Registrations dashboard" section.</div>';
+    refreshText.textContent = 'Not configured';
   }
 </script>
 </body>
