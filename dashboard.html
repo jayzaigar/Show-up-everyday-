@@ -46,8 +46,11 @@
   const openLink = document.getElementById('dashboard-open-link');
 
   if (AIRTABLE_SHARE_VIEW_URL) {
+    // Airtable blocks framing of the plain share link (clickjacking
+    // protection); the /embed/ variant is the one built for iframes.
+    const embedUrl = AIRTABLE_SHARE_VIEW_URL.replace('airtable.com/', 'airtable.com/embed/');
     const iframe = document.createElement('iframe');
-    iframe.src = AIRTABLE_SHARE_VIEW_URL;
+    iframe.src = embedUrl;
     iframe.loading = 'lazy';
     iframe.style.width = '100%';
     iframe.style.height = '75vh';
