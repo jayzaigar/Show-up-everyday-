@@ -1,7 +1,9 @@
 # The Show Up Everyday Series: Landing Page
 
 A static, mobile-first funnel for the free 5-day live experience, with a VIP upsell after registration.
-Dark editorial look: near-black backgrounds, clay/terracotta accents, cream text, Playfair Display
+Strict black/white/warm-gray editorial look, matched to sselfie.ai: near-black background (`#0B0B0B`),
+cream headlines (`#F5F3EE`), muted warm-gray body copy (`#A8A49C`), solid white CTA buttons with black
+text, thin hairline dividers, no gradients, glow, grain texture or color accents. Instrument Serif
 (display) + Inter (body).
 
 ## The funnel
@@ -66,8 +68,8 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
   with the email they paid with), and gives two buttons: **Open Whop** and **Join the VIP WhatsApp
   Group**. **This page's deployed URL is what you set as the "after purchase" redirect in your Whop VIP
   product settings.**
-- `css/styles.css`: all styling: near-black + clay/terracotta + cream palette, grain-texture overlay, a
-  thin ring/lens-mark motif in the hero, Playfair Display + Inter
+- `css/styles.css`: all styling: strict near-black + cream + warm-gray palette (no gradients, glow,
+  grain or color accents), a thin hairline ring motif in the hero, Instrument Serif + Inter
 - `js/site.js`: shared behavior loaded on every page: forces new pages to open scrolled to the top
   (fixes the browser landing mid-page after a click), fades sections and individual cards/list items in
   as you scroll to them (each `.reveal` element animates independently via IntersectionObserver; items
