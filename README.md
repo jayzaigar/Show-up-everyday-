@@ -111,8 +111,6 @@ buttons show immediately instead of waiting on a video that doesn't exist. Once 
 
 ## Placeholders still to fill in
 
-- **VIP WhatsApp group link**: `join-whatsapp-vip.html`, the button's `href` is
-  `[INSERT VIP WHATSAPP GROUP LINK]`.
 - **VIP VSL**: `vip-offer.html`'s headline, offer copy and "What's included" list are filled in. The VSL
   is still a placeholder (see above); swap in the real video once you have it.
 - **Free-series VSL video**: `index.html`'s hero photo slot is a placeholder (dashed border, play icon,
