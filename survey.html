@@ -131,6 +131,7 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name');
+  const rid = params.get('rid');
 
   const steps = Array.from(document.querySelectorAll('.survey-step'));
   const progressFill = document.getElementById('survey-progress-fill');
@@ -175,6 +176,20 @@
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+    // Adds the answers to the same Airtable record created at registration,
+    // fired in the background since nothing downstream needs the result.
+    if (rid) {
+      const data = new FormData(form);
+      airtableRequest('PATCH', {
+        Q1: data.get('q1') || '',
+        Q2: data.get('q2') || '',
+        Q3: data.get('q3') || '',
+        Q4: data.get('q4') || '',
+        Q5: data.get('q5') || '',
+        Q6: data.get('q6') || '',
+        Q7: data.get('q7') || '',
+      }, rid);
+    }
     goToVipOffer();
   });
 

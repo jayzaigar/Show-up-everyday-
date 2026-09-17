@@ -40,6 +40,7 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name');
+  const rid = params.get('rid');
   if (name) {
     document.getElementById('confirm-heading').textContent = `Thank you for registering, ${name}.`;
   }
@@ -48,7 +49,10 @@
   joinLink.addEventListener('click', (event) => {
     event.preventDefault();
     const base = joinLink.getAttribute('href');
-    const destination = name ? `${base}?name=${encodeURIComponent(name)}` : base;
+    const query = new URLSearchParams();
+    if (name) query.set('name', name);
+    if (rid) query.set('rid', rid);
+    const destination = query.toString() ? `${base}?${query.toString()}` : base;
     const messages = [
       'Verifying your registration',
       'Connecting to the WhatsApp group',

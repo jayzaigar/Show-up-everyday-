@@ -32,6 +32,9 @@ form.addEventListener('submit', async (event) => {
   submitButton.disabled = true;
   submitButton.textContent = 'Saving your spot...';
 
+  const selectedOption = form.whatsapp_country_code.selectedOptions[0];
+  const country = selectedOption ? (selectedOption.textContent.split(' · ')[1] || '') : '';
+
   const payload = {
     first_name: firstName,
     email,
@@ -49,6 +52,18 @@ form.addEventListener('submit', async (event) => {
     }).catch((err) => console.error('Registration submit failed', err));
   }
 
+  // Writes the registrant into Airtable (the dashboard's data source) and
+  // waits for the new record's id, so the survey step can add its answers
+  // to this same row instead of creating a duplicate. Resolves to null
+  // (no rid) if Airtable isn't configured or doesn't respond in time.
+  const recordId = await airtableRequest('POST', {
+    'First Name': firstName,
+    Email: email,
+    WhatsApp: `${whatsappCode}${whatsappNumber}`,
+    Country: country,
+    Consent: consent,
+  });
+
   const messages = [
     'Reviewing what you shared',
     'Matching your answers to the right track',
@@ -56,7 +71,9 @@ form.addEventListener('submit', async (event) => {
     'Saving your spot',
   ];
   runAnalyzingSequence(messages, 5000, () => {
-    window.location.href = `confirmation.html?name=${encodeURIComponent(firstName)}`;
+    const query = new URLSearchParams({ name: firstName });
+    if (recordId) query.set('rid', recordId);
+    window.location.href = `confirmation.html?${query.toString()}`;
   });
 });
 

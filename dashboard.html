@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Registrations Dashboard: The Show Up Everyday Series</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!--
+  INTERNAL PAGE, not part of the funnel. Shows a live embed of your Airtable
+  "Registrants" view. See the README's "Registrations dashboard" section
+  for how to set up Airtable and where to paste your share-view link below.
+  This page has no login of its own, only an unlisted URL, so don't link to
+  it from anywhere public.
+-->
+
+<header class="section" style="padding-block: 48px 12px;">
+  <div class="container narrow center">
+    <span class="eyebrow center">Internal</span>
+    <h1>Registrations dashboard</h1>
+    <p class="subhead">Everyone who's registered for The Show Up Everyday Series, live from Airtable. Filter or group by Country or VIP directly inside the embed below.</p>
+  </div>
+</header>
+
+<main class="container" style="padding-block: 20px 60px;">
+  <div id="dashboard-embed" style="border: 1px solid var(--line); min-height: 70vh;"></div>
+  <p class="microcopy center" id="dashboard-open-link" style="margin-top: 16px;"></p>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; SSELFIE.ai &middot; The Show Up Everyday Series</p>
+</footer>
+
+<script>
+  // Paste your Airtable "Share view" link here (see the README). Left
+  // empty, this page shows setup instructions instead of a broken embed.
+  const AIRTABLE_SHARE_VIEW_URL = '';
+
+  const embed = document.getElementById('dashboard-embed');
+  const openLink = document.getElementById('dashboard-open-link');
+
+  if (AIRTABLE_SHARE_VIEW_URL) {
+    const iframe = document.createElement('iframe');
+    iframe.src = AIRTABLE_SHARE_VIEW_URL;
+    iframe.loading = 'lazy';
+    iframe.style.width = '100%';
+    iframe.style.height = '75vh';
+    iframe.style.border = '0';
+    iframe.style.background = 'var(--bg-alt)';
+    embed.appendChild(iframe);
+
+    const link = document.createElement('a');
+    link.href = AIRTABLE_SHARE_VIEW_URL;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.style.textDecoration = 'underline';
+    link.textContent = 'Open the full view in Airtable';
+    openLink.appendChild(link);
+  } else {
+    embed.innerHTML = '<p class="microcopy" style="padding: 40px; text-align: center;">Not set up yet. Create your Airtable base (see the README’s "Registrations dashboard" section), then paste your share-view link into AIRTABLE_SHARE_VIEW_URL near the bottom of dashboard.html.</p>';
+  }
+</script>
+</body>
+</html>

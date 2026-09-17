@@ -1,5 +1,41 @@
 // Shared site behavior, loaded on every page.
 
+// ---------- Airtable (registrations dashboard) ----------
+// Fill these in once you've created your Airtable base (see README's
+// "Registrations dashboard" section). Left empty, nothing is ever sent and
+// the funnel behaves exactly as it did before.
+const AIRTABLE_BASE_ID = '';
+const AIRTABLE_TABLE_NAME = 'Registrants';
+const AIRTABLE_TOKEN = '';
+
+// Creates a record (no recordId) or patches one (with recordId). Never
+// throws and never blocks the funnel: on any failure or timeout it just
+// resolves to null so registration/redirects always proceed regardless of
+// whether Airtable is configured or reachable.
+function airtableRequest(method, fields, recordId) {
+  if (!AIRTABLE_BASE_ID || !AIRTABLE_TOKEN) return Promise.resolve(null);
+  const base = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
+  const url = recordId ? `${base}/${recordId}` : base;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 4000);
+  return fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${AIRTABLE_TOKEN}` },
+    body: JSON.stringify({ fields }),
+    signal: controller.signal,
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error(`Airtable responded ${res.status}`);
+      return res.json();
+    })
+    .then((data) => data.id || recordId || null)
+    .catch((err) => {
+      console.error('Airtable request failed', err);
+      return null;
+    })
+    .finally(() => clearTimeout(timeout));
+}
+
 // Perceived-value loading screen: nothing is actually being analyzed or
 // verified, this is purely a few seconds of reassurance before moving on.
 // Reused wherever a page has the .analyzing-overlay markup (currently
