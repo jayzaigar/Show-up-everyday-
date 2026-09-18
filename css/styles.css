@@ -708,6 +708,10 @@ details p {
   .who-for-list { grid-template-columns: 1fr 1fr; }
 }
 
+@media (min-width: 720px) {
+  #vip-includes .who-for-list { grid-template-columns: repeat(3, 1fr); }
+}
+
 /* ---------- Dashboard ---------- */
 .dash-refresh {
   display: flex;

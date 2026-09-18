@@ -40,8 +40,7 @@ analyzed or verified.
   registration" -> "Connecting to the WhatsApp group" -> "Setting up your access" -> "Almost there",
   then redirects to `survey.html`.
 - **After finishing (or skipping) the survey** (`survey.html`): "Analyzing your answers" -> "Matching
-  you to the right track" -> "Personalizing your VIP recommendation" -> "Almost there", then redirects
-  to `vip-offer.html`.
+  you to the right track" -> "Almost there", then redirects to `vip-offer.html`.
 - **After clicking "Keep Free Ticket"** (`vip-offer.html`): "Locking in your free ticket" -> "Setting up
   your access" -> "Getting your group ready" -> "Almost there", then redirects to
   `join-whatsapp-free.html`. "Upgrade to VIP" skips this and goes straight to the Whop checkout, since
