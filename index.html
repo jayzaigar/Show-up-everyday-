@@ -85,7 +85,13 @@
       <h2>What the five days look like</h2>
       <p class="section-intro">This is a live experience. You'll be creating alongside Sandra, not just watching.</p>
 
-      <ol class="day-list">
+      <div class="day-trail-wrap">
+        <svg class="day-trail-svg" viewBox="0 0 64 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path id="day-trail-path" class="day-trail-path" d="M 32 0 L 32 100" />
+        </svg>
+        <div class="day-trail-icon" id="day-trail-icon" aria-hidden="true"></div>
+
+        <ol class="day-list">
         <li class="day-card reveal">
           <span class="day-number">01</span>
           <div class="day-text">
@@ -121,7 +127,8 @@
             <p>Apply everything live, create something for yourself, no pressure to decide anything before you're ready.</p>
           </div>
         </li>
-      </ol>
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -313,5 +320,46 @@
 
 <script src="js/site.js"></script>
 <script src="js/main.js"></script>
+
+<!-- Scroll-drawn trail connecting the five days, with a small mark traveling
+     along it. Loaded from CDN and fully optional: if any of these fail to
+     load, the guard below just skips the effect, the day-by-day section
+     still works fine without it. -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/DrawSVGPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MotionPathPlugin.min.js"></script>
+<script>
+  (function () {
+    if (!window.gsap || !window.ScrollTrigger || !window.DrawSVGPlugin || !window.MotionPathPlugin) return;
+
+    const wrap = document.querySelector('.day-trail-wrap');
+    const path = document.getElementById('day-trail-path');
+    const icon = document.getElementById('day-trail-icon');
+    if (!wrap || !path || !icon) return;
+
+    gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin);
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(path, { drawSVG: '100%' });
+      gsap.set(icon, { motionPath: { path, align: path, alignOrigin: [0.5, 0.5], end: 1 }, opacity: 1 });
+      return;
+    }
+
+    gsap.set(path, { drawSVG: '0%' });
+    icon.classList.add('is-active');
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: wrap,
+        start: 'top 75%',
+        end: 'bottom 60%',
+        scrub: true,
+      },
+    });
+    tl.to(path, { drawSVG: '100%', ease: 'none' })
+      .to(icon, { motionPath: { path, align: path, alignOrigin: [0.5, 0.5] }, ease: 'none' }, 0);
+  })();
+</script>
 </body>
 </html>

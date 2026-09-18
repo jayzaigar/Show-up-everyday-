@@ -54,8 +54,9 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
 
 ## Files
 
-- `index.html`: the free-series landing page: hero, who-this-is-for, five-day breakdown, why-free,
-  registration form, social proof (placeholder), FAQ, final CTA
+- `index.html`: the free-series landing page: hero, who-this-is-for, five-day breakdown (with a
+  scroll-drawn trail connecting the five days, see below), why-free, registration form, social proof
+  (placeholder), FAQ, final CTA
 - `confirmation.html`: post-registration page ("Thank you for registering"), single button that runs a
   5-second "analyzing" loading screen before landing on `survey.html`
 - `survey.html`: 7 quick multiple-choice questions, one at a time, with a progress bar, auto-advance on
@@ -102,6 +103,17 @@ the next question after a short pause, except on the last question, where a "Sub
 submits. A "Skip this for now" link is always visible so nobody gets stuck. If Airtable is configured
 and a `rid` was passed in from registration, submitting adds the seven answers (`Q1`-`Q7`) to that same
 Airtable record. Skipping the survey doesn't send anything, there are no answers to save.
+
+## The day-by-day scroll trail on index.html
+
+The "What the five days look like" list has a thin vertical line connecting day 01 through 05, drawn
+progressively as you scroll past it, with a small mark traveling along it. Built with
+[GSAP](https://gsap.com) plus its ScrollTrigger, DrawSVG, and MotionPath plugins, loaded from a CDN
+only on `index.html` (no other page needs it). If any of those four scripts fail to load, a guard at
+the top of the inline script just returns early, the day-by-day list still works fine without the
+effect, nothing else on the page breaks. It also respects `prefers-reduced-motion`, showing the line
+fully drawn and the mark at rest instead of animating. The line itself and the mark are plain
+monochrome (matching `--line`/`--cream`), no color added.
 
 ## The VSL-gated buttons on vip-offer.html
 

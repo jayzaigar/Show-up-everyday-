@@ -343,6 +343,40 @@ a { color: inherit; }
   .day-card { grid-template-columns: 1fr; gap: 6px; }
 }
 
+/* ---------- Day trail (scroll-drawn line + traveling mark) ---------- */
+.day-trail-wrap { position: relative; }
+.day-trail-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.day-trail-path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.day-trail-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cream);
+  pointer-events: none;
+  opacity: 0;
+}
+.day-trail-icon.is-active { opacity: 1; }
+
+@media (max-width: 480px) {
+  .day-trail-svg, .day-trail-icon { display: none; }
+}
+
 /* ---------- Why-free ---------- */
 .why-free-quote {
   font-family: var(--font-display);
