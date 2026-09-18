@@ -250,8 +250,6 @@ own sales list for who's paid, find that person's row in Airtable (search by ema
   (YouTube/Vimeo/Wistia iframe, or a `<video>` tag) once that VSL is ready.
 - **Headline**: three options for `index.html`'s hero are written out in an HTML comment above the hero.
   The first one is live; swap in a different one by editing the `<h1>`.
-- **`[TESTIMONIAL 1/2/3: PENDING SANDRA APPROVAL]`**: in `index.html`'s "What it's like inside" section.
-  Do not replace with invented quotes; wait for real, approved testimonials.
 - **Open Graph image**: `index.html`'s `<meta property="og:image">` points to `images/og-cover.jpg`, which
   doesn't exist yet. Export the series cover art at 1200×630 and drop it in at that path.
 - The grain texture and ring/lens-mark motif in both heroes are built with CSS/SVG, not the actual series
