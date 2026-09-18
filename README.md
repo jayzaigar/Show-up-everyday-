@@ -135,7 +135,7 @@ background or gradient text anywhere, matching the strict monochrome brief. Resp
 ```
 placed as the first child inside the page's `.hero` or `.confirm-wrap`/`.survey-wrap`, all of which have
 `position: relative` so the star layer's `position: absolute; inset: 0;` clips correctly.
-**`dashboard.html` deliberately does not have this** — it's an internal data tool, not a brand moment,
+**`dashboard.html` deliberately does not have this.** It's an internal data tool, not a brand moment,
 and decorative motion isn't worth the distraction there.
 
 ## The hero countdown on index.html
