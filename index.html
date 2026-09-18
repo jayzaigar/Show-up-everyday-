@@ -48,6 +48,10 @@
         <span><strong>Format:</strong> Live on Whop</span>
       </div>
 
+      <div class="countdown-wrap" id="hero-countdown" aria-live="off">
+        <span class="eyebrow center">Starts in</span>
+      </div>
+
       <a href="#register" class="btn btn-primary btn-lg">Save My Spot</a>
     </div>
   </div>
@@ -320,6 +324,116 @@
 
 <script src="js/site.js"></script>
 <script src="js/main.js"></script>
+
+<!-- Countdown to the first live day (October 4, 2026, 7PM CEST). Custom
+     split-flap digit display, no external dependency. Once the target
+     time passes, swaps to a "we're live" message instead of going
+     negative. -->
+<script>
+  (function () {
+    const root = document.getElementById('hero-countdown');
+    if (!root) return;
+
+    if (/^(?:(?!chrome|android)[\s\S])*(?:safari|iPad|iPhone|iPod)/i.test(navigator.userAgent)) {
+      root.classList.add('safari');
+    }
+
+    const BARS = [
+      ['end', 'top'],
+      ['side', 'top', 'left'],
+      ['side', 'top', 'right'],
+      ['middle'],
+      ['side', 'bottom', 'left'],
+      ['side', 'bottom', 'right'],
+      ['end', 'bottom'],
+    ];
+
+    function buildDigitGroup(value, padding) {
+      const group = document.createElement('div');
+      group.className = 'digit-group';
+      const digitEls = [...String(value).padStart(padding, '0')].map((d) => {
+        const digit = document.createElement('figure');
+        digit.className = 'digit';
+        digit.setAttribute('data-digit', d);
+        BARS.forEach((classes) => {
+          const span = document.createElement('span');
+          span.classList.add(...classes);
+          digit.appendChild(span);
+        });
+        group.appendChild(digit);
+        return digit;
+      });
+      return {
+        element: group,
+        update(value) {
+          [...String(value).padStart(padding, '0')].forEach((d, i) => {
+            if (digitEls[i]) digitEls[i].setAttribute('data-digit', d);
+          });
+        },
+      };
+    }
+
+    function buildColon() {
+      const colon = document.createElement('div');
+      colon.className = 'countdown-colon';
+      colon.appendChild(document.createElement('span'));
+      return colon;
+    }
+
+    function buildUnit(label, padding) {
+      const unit = document.createElement('div');
+      unit.className = 'countdown-unit';
+      const group = buildDigitGroup(0, padding);
+      const labelEl = document.createElement('span');
+      labelEl.className = 'countdown-label';
+      labelEl.textContent = label;
+      unit.append(group.element, labelEl);
+      return { element: unit, update: group.update };
+    }
+
+    const targetDate = new Date('2026-10-04T19:00:00+02:00');
+
+    const days = buildUnit('Days', 2);
+    const hours = buildUnit('Hrs', 2);
+    const minutes = buildUnit('Min', 2);
+    const seconds = buildUnit('Sec', 2);
+
+    const row = document.createElement('div');
+    row.className = 'countdown-row';
+    row.append(days.element, buildColon(), hours.element, buildColon(), minutes.element, buildColon(), seconds.element);
+    root.appendChild(row);
+
+    function render() {
+      const diff = targetDate - new Date();
+      if (diff <= 0) {
+        row.remove();
+        const live = document.createElement('p');
+        live.className = 'countdown-live';
+        live.textContent = "We're live now.";
+        root.appendChild(live);
+        return false;
+      }
+      days.update(Math.floor(diff / 86400000));
+      hours.update(Math.floor((diff % 86400000) / 3600000));
+      minutes.update(Math.floor((diff % 3600000) / 60000));
+      seconds.update(Math.floor((diff % 60000) / 1000));
+      return true;
+    }
+
+    if (!render()) return;
+
+    let lastSecond = Math.floor((targetDate - new Date()) / 1000);
+    function tick() {
+      const secondsLeft = Math.floor((targetDate - new Date()) / 1000);
+      if (secondsLeft !== lastSecond) {
+        lastSecond = secondsLeft;
+        if (!render()) return;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
 
 <!-- Scroll-drawn trail connecting the five days, with a small mark traveling
      along it. Loaded from CDN and fully optional: if any of these fail to

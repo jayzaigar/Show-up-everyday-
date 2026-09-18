@@ -117,6 +117,21 @@ effect, nothing else on the page breaks. It also respects `prefers-reduced-motio
 fully drawn and the mark at rest instead of animating. The line itself and the mark are plain
 monochrome (matching `--line`/`--cream`), no color added.
 
+## The hero countdown on index.html
+
+A custom split-flap digit display counts down to the first live day (October 4, 2026, 7PM CEST),
+sitting between the event facts and the "Save My Spot" button. No external dependency, pure vanilla
+JS/CSS. Days/Hrs/Min/Sec, each digit built from seven clip-path bar segments (matching a real
+seven-segment display), lit or dimmed via a `--act` custom property per digit value. Once the target
+time passes, it swaps to a plain "We're live now." message instead of counting into negative numbers.
+Respects `prefers-reduced-motion` (disables the digit-change transition) and includes the same Safari
+clip-path rendering fix as the original reference snippet this was adapted from.
+
+If you ever touch this component's CSS: every digit is a `<figure>`, and this project's global reset
+only sets `box-sizing` (not `margin: 0`), so `<figure>`'s browser-default `margin: 1em 40px` will leak
+back in if that explicit `margin: 0` on `.digit-group .digit` is ever removed, it did once during
+development and silently blew the layout out to several times its intended width.
+
 ## The VIP inclusions stagger on vip-offer.html
 
 The three "What you get with VIP" cards scale and fade in with a restrained bounce (`back.out(1.2)`,
