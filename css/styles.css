@@ -557,19 +557,10 @@ select:invalid { color: var(--taupe-dim); }
   border-top: 1px solid var(--line);
   transition: opacity .5s var(--ease), transform .5s var(--ease);
 }
-.proof-card p {
-  font-style: italic;
-  color: var(--taupe);
-  margin-bottom: 0;
-}
-.proof-card .proof-tag {
-  display: block;
-  margin-top: 14px;
-  font-style: normal;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--taupe);
+.proof-card img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
 }
 
 @media (min-width: 720px) {
