@@ -117,6 +117,17 @@ effect, nothing else on the page breaks. It also respects `prefers-reduced-motio
 fully drawn and the mark at rest instead of animating. The line itself and the mark are plain
 monochrome (matching `--line`/`--cream`), no color added.
 
+## The VIP inclusions stagger on vip-offer.html
+
+The three "What you get with VIP" cards scale and fade in with a restrained bounce (`back.out(1.2)`,
+not GSAP's default punchier overshoot), staggered outward from the center card as the section scrolls
+into view. Built with GSAP + ScrollTrigger only (no DrawSVG/MotionPath needed here), loaded from a CDN
+only on `vip-offer.html`. Uses `gsap.fromTo()` with explicit start and end values rather than
+`gsap.from()`, since `.from()` can mis-capture its "to" state when combined with ScrollTrigger's
+refresh cycle (it did, in testing, animate from opacity 0 back to opacity 0). Same fail-safe pattern as
+the day-trail: if GSAP or ScrollTrigger fail to load, or `prefers-reduced-motion` is set, the cards just
+show normally with no animation.
+
 ## The VSL-gated buttons on vip-offer.html
 
 The Keep Free Ticket / Upgrade to VIP buttons stay hidden (and unclickable) until the VSL reaches its

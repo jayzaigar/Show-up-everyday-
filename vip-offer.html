@@ -108,6 +108,36 @@
 </footer>
 
 <script src="js/site.js"></script>
+
+<!-- A restrained scale+fade stagger on the "What you get with VIP" cards, radiating
+     out from the center as the section scrolls into view. Optional: if either
+     script fails to load, or the visitor prefers reduced motion, the cards just
+     show normally with no animation, nothing else on the page depends on this. -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script>
+  (function () {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.fromTo('#vip-includes .who-for-list > li',
+      { scale: 0.92, opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'back.out(1.2)',
+        stagger: { amount: 0.5, from: 'center' },
+        scrollTrigger: {
+          trigger: '#vip-includes .who-for-list',
+          start: 'top 80%',
+        },
+      }
+    );
+  })();
+</script>
 <script>
   const keepFreeLink = document.getElementById('keep-free-link');
   keepFreeLink.addEventListener('click', (event) => {
