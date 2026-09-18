@@ -117,6 +117,27 @@ effect, nothing else on the page breaks. It also respects `prefers-reduced-motio
 fully drawn and the mark at rest instead of animating. The line itself and the mark are plain
 monochrome (matching `--line`/`--cream`), no color added.
 
+## The starfield background
+
+Every customer-facing page (`index.html`, `vip-offer.html`, `confirmation.html`, `survey.html`,
+`join-whatsapp-free.html`, `join-whatsapp-vip.html`) has a subtly drifting starfield behind its
+near-black hero/wrap section: three layers of plain `var(--cream)` dots (~120 total, deliberately
+sparse), each layer looping upward at a different speed (90s/150s/220s) so it reads as ambient texture
+rather than a distraction. Pure CSS (the classic `box-shadow`-per-dot technique), no JS, no gradient
+background or gradient text anywhere, matching the strict monochrome brief. Respects
+`prefers-reduced-motion` (stops the drift entirely). The shared markup is:
+```html
+<div class="stars-layer" aria-hidden="true">
+  <div id="stars"></div>
+  <div id="stars2"></div>
+  <div id="stars3"></div>
+</div>
+```
+placed as the first child inside the page's `.hero` or `.confirm-wrap`/`.survey-wrap`, all of which have
+`position: relative` so the star layer's `position: absolute; inset: 0;` clips correctly.
+**`dashboard.html` deliberately does not have this** — it's an internal data tool, not a brand moment,
+and decorative motion isn't worth the distraction there.
+
 ## The hero countdown on index.html
 
 A custom split-flap digit display counts down to the first live day (October 4, 2026, 7PM CEST),

@@ -625,6 +625,7 @@ details p {
 
 /* ---------- Survey ---------- */
 .survey-wrap {
+  position: relative;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -717,6 +718,7 @@ details p {
 
 /* ---------- Confirmation page ---------- */
 .confirm-wrap {
+  position: relative;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -1014,4 +1016,307 @@ details p {
 
 @media (prefers-reduced-motion: reduce) {
   .digit-group .digit span { transition: none; }
+}
+
+/* ---------- Starfield (ambient drifting dots, used on hero/full-bleed sections) ---------- */
+.stars-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+#stars, #stars2, #stars3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+}
+#stars { width: 1px; height: 1px; animation: star-drift 90s linear infinite; }
+#stars2 { width: 2px; height: 2px; animation: star-drift 150s linear infinite; }
+#stars3 { width: 3px; height: 3px; animation: star-drift 220s linear infinite; }
+#stars {
+  box-shadow:
+    1309px 228px var(--cream),
+    51px 563px var(--cream),
+    501px 457px var(--cream),
+    285px 209px var(--cream),
+    1385px 178px var(--cream),
+    1209px 864px var(--cream),
+    65px 61px var(--cream),
+    191px 447px var(--cream),
+    476px 1034px var(--cream),
+    1232px 54px var(--cream),
+    1149px 407px var(--cream),
+    1466px 859px var(--cream),
+    451px 919px var(--cream),
+    1206px 569px var(--cream),
+    1657px 13px var(--cream),
+    1554px 326px var(--cream),
+    1429px 865px var(--cream),
+    696px 569px var(--cream),
+    318px 440px var(--cream),
+    1563px 689px var(--cream),
+    209px 189px var(--cream),
+    778px 198px var(--cream),
+    735px 704px var(--cream),
+    1236px 541px var(--cream),
+    1652px 88px var(--cream),
+    1494px 940px var(--cream),
+    1098px 255px var(--cream),
+    1888px 775px var(--cream),
+    161px 600px var(--cream),
+    1698px 740px var(--cream),
+    1182px 393px var(--cream),
+    1442px 142px var(--cream),
+    93px 466px var(--cream),
+    1583px 592px var(--cream),
+    163px 476px var(--cream),
+    1774px 206px var(--cream),
+    778px 569px var(--cream),
+    928px 747px var(--cream),
+    333px 758px var(--cream),
+    727px 429px var(--cream),
+    1372px 546px var(--cream),
+    1437px 146px var(--cream),
+    1247px 350px var(--cream),
+    1093px 501px var(--cream),
+    334px 946px var(--cream),
+    777px 552px var(--cream),
+    1895px 449px var(--cream),
+    1402px 664px var(--cream),
+    1726px 114px var(--cream),
+    469px 65px var(--cream),
+    1648px 646px var(--cream),
+    821px 548px var(--cream),
+    135px 432px var(--cream),
+    1870px 644px var(--cream),
+    435px 1022px var(--cream),
+    810px 939px var(--cream),
+    292px 542px var(--cream),
+    285px 505px var(--cream),
+    1525px 538px var(--cream),
+    1529px 877px var(--cream),
+    1838px 817px var(--cream),
+    741px 449px var(--cream),
+    283px 1043px var(--cream),
+    1010px 186px var(--cream),
+    1547px 96px var(--cream),
+    1763px 224px var(--cream),
+    313px 327px var(--cream),
+    1622px 864px var(--cream),
+    1221px 130px var(--cream),
+    788px 781px var(--cream);
+}
+#stars:after {
+  content: "";
+  position: absolute;
+  top: 1080px;
+  width: 1px;
+  height: 1px;
+  box-shadow:
+    1309px 228px var(--cream),
+    51px 563px var(--cream),
+    501px 457px var(--cream),
+    285px 209px var(--cream),
+    1385px 178px var(--cream),
+    1209px 864px var(--cream),
+    65px 61px var(--cream),
+    191px 447px var(--cream),
+    476px 1034px var(--cream),
+    1232px 54px var(--cream),
+    1149px 407px var(--cream),
+    1466px 859px var(--cream),
+    451px 919px var(--cream),
+    1206px 569px var(--cream),
+    1657px 13px var(--cream),
+    1554px 326px var(--cream),
+    1429px 865px var(--cream),
+    696px 569px var(--cream),
+    318px 440px var(--cream),
+    1563px 689px var(--cream),
+    209px 189px var(--cream),
+    778px 198px var(--cream),
+    735px 704px var(--cream),
+    1236px 541px var(--cream),
+    1652px 88px var(--cream),
+    1494px 940px var(--cream),
+    1098px 255px var(--cream),
+    1888px 775px var(--cream),
+    161px 600px var(--cream),
+    1698px 740px var(--cream),
+    1182px 393px var(--cream),
+    1442px 142px var(--cream),
+    93px 466px var(--cream),
+    1583px 592px var(--cream),
+    163px 476px var(--cream),
+    1774px 206px var(--cream),
+    778px 569px var(--cream),
+    928px 747px var(--cream),
+    333px 758px var(--cream),
+    727px 429px var(--cream),
+    1372px 546px var(--cream),
+    1437px 146px var(--cream),
+    1247px 350px var(--cream),
+    1093px 501px var(--cream),
+    334px 946px var(--cream),
+    777px 552px var(--cream),
+    1895px 449px var(--cream),
+    1402px 664px var(--cream),
+    1726px 114px var(--cream),
+    469px 65px var(--cream),
+    1648px 646px var(--cream),
+    821px 548px var(--cream),
+    135px 432px var(--cream),
+    1870px 644px var(--cream),
+    435px 1022px var(--cream),
+    810px 939px var(--cream),
+    292px 542px var(--cream),
+    285px 505px var(--cream),
+    1525px 538px var(--cream),
+    1529px 877px var(--cream),
+    1838px 817px var(--cream),
+    741px 449px var(--cream),
+    283px 1043px var(--cream),
+    1010px 186px var(--cream),
+    1547px 96px var(--cream),
+    1763px 224px var(--cream),
+    313px 327px var(--cream),
+    1622px 864px var(--cream),
+    1221px 130px var(--cream),
+    788px 781px var(--cream);
+}
+#stars2 {
+  box-shadow:
+    1220px 958px var(--cream),
+    1083px 514px var(--cream),
+    1133px 23px var(--cream),
+    1393px 234px var(--cream),
+    1396px 546px var(--cream),
+    1574px 696px var(--cream),
+    228px 601px var(--cream),
+    890px 323px var(--cream),
+    929px 6px var(--cream),
+    1478px 539px var(--cream),
+    1025px 365px var(--cream),
+    1039px 217px var(--cream),
+    1782px 611px var(--cream),
+    1723px 1039px var(--cream),
+    1247px 407px var(--cream),
+    313px 765px var(--cream),
+    1561px 330px var(--cream),
+    1104px 1px var(--cream),
+    1226px 663px var(--cream),
+    1000px 39px var(--cream),
+    229px 743px var(--cream),
+    1799px 629px var(--cream),
+    490px 118px var(--cream),
+    493px 161px var(--cream),
+    175px 995px var(--cream),
+    1671px 141px var(--cream),
+    1557px 257px var(--cream),
+    262px 973px var(--cream),
+    1125px 338px var(--cream),
+    542px 1080px var(--cream),
+    1786px 866px var(--cream),
+    433px 411px var(--cream),
+    1460px 638px var(--cream),
+    817px 764px var(--cream),
+    897px 1059px var(--cream);
+}
+#stars2:after {
+  content: "";
+  position: absolute;
+  top: 1080px;
+  width: 2px;
+  height: 2px;
+  box-shadow:
+    1220px 958px var(--cream),
+    1083px 514px var(--cream),
+    1133px 23px var(--cream),
+    1393px 234px var(--cream),
+    1396px 546px var(--cream),
+    1574px 696px var(--cream),
+    228px 601px var(--cream),
+    890px 323px var(--cream),
+    929px 6px var(--cream),
+    1478px 539px var(--cream),
+    1025px 365px var(--cream),
+    1039px 217px var(--cream),
+    1782px 611px var(--cream),
+    1723px 1039px var(--cream),
+    1247px 407px var(--cream),
+    313px 765px var(--cream),
+    1561px 330px var(--cream),
+    1104px 1px var(--cream),
+    1226px 663px var(--cream),
+    1000px 39px var(--cream),
+    229px 743px var(--cream),
+    1799px 629px var(--cream),
+    490px 118px var(--cream),
+    493px 161px var(--cream),
+    175px 995px var(--cream),
+    1671px 141px var(--cream),
+    1557px 257px var(--cream),
+    262px 973px var(--cream),
+    1125px 338px var(--cream),
+    542px 1080px var(--cream),
+    1786px 866px var(--cream),
+    433px 411px var(--cream),
+    1460px 638px var(--cream),
+    817px 764px var(--cream),
+    897px 1059px var(--cream);
+}
+#stars3 {
+  box-shadow:
+    924px 247px var(--cream),
+    507px 460px var(--cream),
+    131px 692px var(--cream),
+    43px 471px var(--cream),
+    1205px 451px var(--cream),
+    14px 145px var(--cream),
+    1449px 120px var(--cream),
+    468px 138px var(--cream),
+    1854px 64px var(--cream),
+    1760px 676px var(--cream),
+    145px 1052px var(--cream),
+    487px 570px var(--cream),
+    1370px 994px var(--cream),
+    438px 270px var(--cream),
+    1481px 968px var(--cream),
+    497px 968px var(--cream),
+    1653px 833px var(--cream),
+    389px 193px var(--cream);
+}
+#stars3:after {
+  content: "";
+  position: absolute;
+  top: 1080px;
+  width: 3px;
+  height: 3px;
+  box-shadow:
+    924px 247px var(--cream),
+    507px 460px var(--cream),
+    131px 692px var(--cream),
+    43px 471px var(--cream),
+    1205px 451px var(--cream),
+    14px 145px var(--cream),
+    1449px 120px var(--cream),
+    468px 138px var(--cream),
+    1854px 64px var(--cream),
+    1760px 676px var(--cream),
+    145px 1052px var(--cream),
+    487px 570px var(--cream),
+    1370px 994px var(--cream),
+    438px 270px var(--cream),
+    1481px 968px var(--cream),
+    497px 968px var(--cream),
+    1653px 833px var(--cream),
+    389px 193px var(--cream);
+}
+@keyframes star-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-1080px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #stars, #stars2, #stars3 { animation: none; }
 }
