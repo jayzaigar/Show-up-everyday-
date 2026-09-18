@@ -370,11 +370,22 @@ a { color: inherit; }
   background: var(--cream);
   pointer-events: none;
   opacity: 0;
+  z-index: 1;
+}
+.day-trail-stop {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  pointer-events: none;
 }
 .day-trail-icon.is-active { opacity: 1; }
 
 @media (max-width: 480px) {
-  .day-trail-svg, .day-trail-icon { display: none; }
+  .day-trail-svg, .day-trail-icon, .day-trail-stop { display: none; }
 }
 
 /* ---------- Why-free ---------- */

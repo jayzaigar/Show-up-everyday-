@@ -106,9 +106,11 @@ Airtable record. Skipping the survey doesn't send anything, there are no answers
 
 ## The day-by-day scroll trail on index.html
 
-The "What the five days look like" list has a thin vertical line connecting day 01 through 05, drawn
-progressively as you scroll past it, with a small mark traveling along it. Built with
-[GSAP](https://gsap.com) plus its ScrollTrigger, DrawSVG, and MotionPath plugins, loaded from a CDN
+The "What the five days look like" list has a winding, map-style route connecting day 01 through 05,
+drawn progressively as you scroll past it, with hollow ring markers at each day and a small filled mark
+traveling along it to show current scroll position. The route's shape is computed at runtime from each
+`.day-number`'s real position (so it stays aligned even if content reflows) and rebuilt on resize. Built
+with [GSAP](https://gsap.com) plus its ScrollTrigger, DrawSVG, and MotionPath plugins, loaded from a CDN
 only on `index.html` (no other page needs it). If any of those four scripts fail to load, a guard at
 the top of the inline script just returns early, the day-by-day list still works fine without the
 effect, nothing else on the page breaks. It also respects `prefers-reduced-motion`, showing the line

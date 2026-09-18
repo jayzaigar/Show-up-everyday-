@@ -334,11 +334,58 @@
     if (!window.gsap || !window.ScrollTrigger || !window.DrawSVGPlugin || !window.MotionPathPlugin) return;
 
     const wrap = document.querySelector('.day-trail-wrap');
+    const svg = document.querySelector('.day-trail-svg');
     const path = document.getElementById('day-trail-path');
     const icon = document.getElementById('day-trail-icon');
-    if (!wrap || !path || !icon) return;
+    const numbers = Array.from(document.querySelectorAll('.day-list .day-number'));
+    if (!wrap || !svg || !path || !icon || numbers.length < 2) return;
 
     gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin);
+
+    const GUTTER = 64; // matches the day-card's number column width
+    const BASE_X = GUTTER / 2;
+    const SWAY = 16; // how far the route swings left/right of center, like a winding map route
+
+    const stops = [];
+
+    function buildRoute() {
+      const wrapRect = wrap.getBoundingClientRect();
+      const height = Math.max(wrapRect.height, 1);
+      svg.setAttribute('viewBox', `0 0 ${GUTTER} ${height}`);
+
+      const points = numbers.map((el, i) => {
+        const r = el.getBoundingClientRect();
+        return {
+          x: BASE_X + (i % 2 === 0 ? -SWAY : SWAY),
+          y: r.top + r.height / 2 - wrapRect.top,
+        };
+      });
+
+      let d = `M ${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const c1y = prev.y + (curr.y - prev.y) / 3;
+        const c2y = prev.y + ((curr.y - prev.y) * 2) / 3;
+        d += ` C ${prev.x} ${c1y}, ${curr.x} ${c2y}, ${curr.x} ${curr.y}`;
+      }
+      path.setAttribute('d', d);
+
+      points.forEach((p, i) => {
+        let stop = stops[i];
+        if (!stop) {
+          stop = document.createElement('div');
+          stop.className = 'day-trail-stop';
+          stop.setAttribute('aria-hidden', 'true');
+          wrap.appendChild(stop);
+          stops[i] = stop;
+        }
+        stop.style.left = `${p.x}px`;
+        stop.style.top = `${p.y}px`;
+      });
+    }
+
+    buildRoute();
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       gsap.set(path, { drawSVG: '100%' });
@@ -359,6 +406,15 @@
     });
     tl.to(path, { drawSVG: '100%', ease: 'none' })
       .to(icon, { motionPath: { path, align: path, alignOrigin: [0.5, 0.5] }, ease: 'none' }, 0);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        buildRoute();
+        ScrollTrigger.refresh();
+      }, 200);
+    });
   })();
 </script>
 </body>
