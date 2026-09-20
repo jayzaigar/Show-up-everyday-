@@ -276,6 +276,24 @@ a { color: inherit; }
   aspect-ratio: 16 / 9;
 }
 
+/* Read-only progress indicator: shows how far the video is, but
+   pointer-events:none means it can't be clicked or dragged to seek. */
+.video-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+.video-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--white);
+}
+
 @media (min-width: 860px) {
   .hero-media { max-width: var(--max-width); margin-inline: auto; aspect-ratio: 16 / 9; }
   .hero-media img { object-position: 50% 15%; }

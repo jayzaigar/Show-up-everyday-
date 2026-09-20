@@ -129,18 +129,32 @@ function autoUnmuteOnInteraction(videoEl) {
   });
 }
 
+// Read-only progress bar: reflects playback via width%, but has no click or
+// drag handling of its own (and CSS makes it pointer-events:none), so it
+// can't be used to seek.
+function wireProgressBar(videoEl, fillEl) {
+  if (!fillEl) return;
+  videoEl.addEventListener('timeupdate', () => {
+    if (videoEl.duration) fillEl.style.width = `${(videoEl.currentTime / videoEl.duration) * 100}%`;
+  });
+}
+
 // Landing-page hero video: no `controls` attribute, and CSS makes it
 // pointer-events:none, so it can't be paused, seeked, or fullscreened.
 const heroVslVideoEl = document.getElementById('hero-vsl-video');
-if (heroVslVideoEl) autoUnmuteOnInteraction(heroVslVideoEl);
+if (heroVslVideoEl) {
+  autoUnmuteOnInteraction(heroVslVideoEl);
+  wireProgressBar(heroVslVideoEl, document.getElementById('hero-vsl-progress'));
+}
 
-// VIP page VSL: native controls stay on (visitors can pause/rewind), and
-// the Keep Free Ticket / Upgrade to VIP buttons stay hidden until the
-// video's final 10 seconds, then fade in.
+// VIP page VSL: no `controls` attribute either, so visitors can't pause or
+// seek it, and the Keep Free Ticket / Upgrade to VIP buttons stay hidden
+// until the video's final 10 seconds, then fade in.
 const vslVideoEl = document.getElementById('vsl-video');
 const pathChoice = document.querySelector('.path-choice');
 if (vslVideoEl) {
   autoUnmuteOnInteraction(vslVideoEl);
+  wireProgressBar(vslVideoEl, document.getElementById('vsl-progress'));
   let revealed = false;
   const revealPath = () => {
     if (revealed) return;
