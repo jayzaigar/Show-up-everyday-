@@ -259,32 +259,32 @@
     <div class="container narrow reveal">
       <span class="eyebrow center">From past participants</span>
       <div class="proof-grid">
-        <div class="proof-card reveal">
+        <div class="proof-card">
           <div class="proof-media">
             <img src="images/testimonials/testimonial-1.png" alt="Five-star review: Best AI photo shoot ever. This is incredible.">
           </div>
         </div>
-        <div class="proof-card reveal">
+        <div class="proof-card">
           <div class="proof-media">
             <img src="images/testimonials/testimonial-2.png" alt="Five-star review from Laurie Garcia: I gave Maya my story and she nailed it.">
           </div>
         </div>
-        <div class="proof-card reveal">
+        <div class="proof-card">
           <div class="proof-media">
             <img src="images/testimonials/testimonial-3.jpg" alt="Instagram comment from cheznadia_onlineshopping: your words changed me a lot.">
           </div>
         </div>
-        <div class="proof-card reveal">
+        <div class="proof-card">
           <div class="proof-media">
             <img src="images/testimonials/testimonial-4.jpg" alt="Instagram comment from luiemei: this is just so encouraging.">
           </div>
         </div>
-        <div class="proof-card reveal">
+        <div class="proof-card">
           <div class="proof-media">
             <img src="images/testimonials/testimonial-5.jpg" alt="Private message: you are one of the reasons why I keep on going and building my own biz.">
           </div>
         </div>
-        <div class="proof-card reveal">
+        <div class="proof-card">
           <div class="proof-media">
             <img src="images/testimonials/testimonial-6.jpg" alt="Oh yes, 50 and fabulous. Best one so far, love that it looks real and me.">
           </div>
@@ -552,6 +552,30 @@
         buildRoute();
         ScrollTrigger.refresh();
       }, 200);
+    });
+  })();
+</script>
+
+<!-- A scale+fade stagger on the testimonial cards, radiating out from the
+     center as the grid scrolls into view. Optional: if GSAP fails to load,
+     or the visitor prefers reduced motion, the cards just show normally. -->
+<script>
+  (function () {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('#proof .proof-card', {
+      scale: 0,
+      opacity: 0,
+      duration: 0.4,
+      stagger: { amount: 0.6, from: 'center' },
+      ease: 'back.out(1.7)',
+      scrollTrigger: {
+        trigger: '#proof .proof-grid',
+        start: 'top 80%',
+      },
     });
   })();
 </script>
