@@ -115,42 +115,89 @@ if (revealEls.length) {
   }
 }
 
-// VSL-gated path choice (only present on vip-offer.html): the Keep Free
-// Ticket / Upgrade to VIP buttons stay hidden until the VSL's final 10
+// VSL videos: autoplay muted on load (browsers block unmuted autoplay), with
+// a click-to-unmute button. On vip-offer.html only, the Keep Free Ticket /
+// Upgrade to VIP buttons also stay hidden until the video's final 10
 // seconds, then fade in.
-const vslPlayerEl = document.getElementById('vsl-player');
+const heroVslPlayerEl = document.getElementById('hero-vsl-player');
+const vipVslPlayerEl = document.getElementById('vsl-player');
 const pathChoice = document.querySelector('.path-choice');
 
-if (pathChoice && vslPlayerEl) {
+function wireVslUnmuteButton(btn, getPlayer) {
+  if (!btn) return;
+  const label = btn.querySelector('span');
+  btn.addEventListener('click', () => {
+    const player = getPlayer();
+    if (!player || typeof player.isMuted !== 'function') return;
+    if (player.isMuted()) {
+      player.unMute();
+      if (label) label.textContent = 'Mute';
+      btn.setAttribute('aria-label', 'Mute video');
+    } else {
+      player.mute();
+      if (label) label.textContent = 'Unmute';
+      btn.setAttribute('aria-label', 'Unmute video');
+    }
+  });
+}
+
+if (heroVslPlayerEl || vipVslPlayerEl) {
+  // rel:0 keeps YouTube's end-of-video "recommended videos" grid limited to
+  // this channel's own uploads; YouTube doesn't offer a way to remove it
+  // entirely from an embed.
+  const commonPlayerVars = { autoplay: 1, mute: 1, rel: 0, playsinline: 1 };
   let revealed = false;
   const revealPath = () => {
-    if (revealed) return;
+    if (revealed || !pathChoice) return;
     revealed = true;
     pathChoice.classList.add('is-visible');
   };
 
-  let progressTimer = null;
   window.onYouTubeIframeAPIReady = () => {
-    new YT.Player('vsl-player', {
-      videoId: 'Ae_Y2XhjISY',
-      width: '100%',
-      height: '100%',
-      playerVars: { rel: 0, playsinline: 1 },
-      events: {
-        onStateChange: (event) => {
-          clearInterval(progressTimer);
-          if (event.data === YT.PlayerState.PLAYING) {
-            progressTimer = setInterval(() => {
-              const duration = event.target.getDuration();
-              const current = event.target.getCurrentTime();
-              if (duration && duration - current <= 10) revealPath();
-            }, 1000);
-          } else if (event.data === YT.PlayerState.ENDED) {
-            revealPath();
-          }
+    if (heroVslPlayerEl) {
+      const heroPlayer = new YT.Player('hero-vsl-player', {
+        videoId: 'TflvXmt7Da0',
+        width: '100%',
+        height: '100%',
+        playerVars: commonPlayerVars,
+        events: {
+          onReady: (event) => {
+            event.target.mute();
+            event.target.playVideo();
+          },
         },
-      },
-    });
+      });
+      wireVslUnmuteButton(document.getElementById('hero-vsl-unmute'), () => heroPlayer);
+    }
+
+    if (vipVslPlayerEl) {
+      let progressTimer = null;
+      const vipPlayer = new YT.Player('vsl-player', {
+        videoId: 'Ae_Y2XhjISY',
+        width: '100%',
+        height: '100%',
+        playerVars: commonPlayerVars,
+        events: {
+          onReady: (event) => {
+            event.target.mute();
+            event.target.playVideo();
+          },
+          onStateChange: (event) => {
+            clearInterval(progressTimer);
+            if (event.data === YT.PlayerState.PLAYING) {
+              progressTimer = setInterval(() => {
+                const duration = event.target.getDuration();
+                const current = event.target.getCurrentTime();
+                if (duration && duration - current <= 10) revealPath();
+              }, 1000);
+            } else if (event.data === YT.PlayerState.ENDED) {
+              revealPath();
+            }
+          },
+        },
+      });
+      wireVslUnmuteButton(document.getElementById('vip-vsl-unmute'), () => vipPlayer);
+    }
   };
 
   const apiTag = document.createElement('script');

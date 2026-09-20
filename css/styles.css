@@ -256,6 +256,27 @@ a { color: inherit; }
 }
 .hero-media video { background: var(--bg-alt); }
 
+.vsl-unmute-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(11,11,11,0.6);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.vsl-unmute-btn:hover { background: rgba(11,11,11,0.8); border-color: rgba(255,255,255,0.6); }
+
 @media (min-width: 860px) {
   .hero-media { max-width: var(--max-width); margin-inline: auto; aspect-ratio: 16 / 9; }
   .hero-media img { object-position: 50% 15%; }
