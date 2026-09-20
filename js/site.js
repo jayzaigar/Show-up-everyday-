@@ -77,6 +77,26 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 window.addEventListener('pageshow', () => window.scrollTo(0, 0));
 
+// Initial page-load screen (index.html only, see the markup right after
+// <body> there): holds for 5 seconds, giving the hero video a head start on
+// buffering behind it — same duration/visual language as .analyzing-overlay
+// elsewhere on the site (it reuses those classes), just self-triggered on
+// load instead of on a form submit.
+const pageLoadOverlay = document.getElementById('page-load-overlay');
+if (pageLoadOverlay) {
+  const pageLoadBarFill = document.getElementById('page-load-bar-fill');
+  if (pageLoadBarFill) {
+    pageLoadBarFill.getBoundingClientRect();
+    pageLoadBarFill.style.width = '100%';
+  }
+  setTimeout(() => {
+    pageLoadOverlay.classList.remove('is-visible');
+    pageLoadOverlay.addEventListener('transitionend', () => {
+      pageLoadOverlay.classList.remove('is-active');
+    }, { once: true });
+  }, 5000);
+}
+
 // Fade-up reveal for any element marked .reveal as it scrolls into view.
 // Elements that share a direct parent (cards in the same list/grid, FAQ
 // items, etc.) get a small incremental delay so they cascade in one after

@@ -17,11 +17,30 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
-<noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
+<noscript><style>
+  .reveal { opacity: 1 !important; transform: none !important; }
+  #page-load-overlay { display: none !important; }
+</style></noscript>
 </head>
 <body>
 
 <a class="skip-link" href="#register">Skip to registration</a>
+
+<!-- INITIAL PAGE-LOAD SCREEN: covers the hero for a few seconds while its video
+     buffers behind it (already downloading via its own autoplay/preload
+     attributes, same as always), so playback can start smoothly the instant
+     this lifts instead of stalling live in front of the visitor. Starts
+     visible directly in markup (not via JS) so there's no flash of the hero
+     underneath before js/site.js runs; it removes itself after a few seconds
+     (see js/site.js). Purely perceived-value UX. -->
+<div class="analyzing-overlay is-active is-visible" id="page-load-overlay" aria-hidden="true">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="analyzing-content">
+    <div class="analyzing-ring" aria-hidden="true"></div>
+    <h2>Getting things ready</h2>
+    <div class="analyzing-bar"><div class="analyzing-bar-fill" id="page-load-bar-fill"></div></div>
+  </div>
+</div>
 
 <!--
   HEADLINE OPTIONS (Sandra to pick: the first is live below, the other two are here to swap in):
