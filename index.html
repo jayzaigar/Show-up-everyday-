@@ -60,10 +60,14 @@
       <a href="#register" class="btn btn-primary btn-lg">Save My Spot</a>
     </div>
   </div>
-  <!-- Ambient autoplay video: no native YouTube chrome, no play/pause or seek
-       (see js/site.js — controls:0 plus a pointer-events:none iframe). -->
+  <!-- Self-hosted: zero YouTube chrome/branding, no play/pause or seek (no
+       controls attribute, and CSS makes it pointer-events:none). Starts
+       muted (browser policy) then unmutes on the visitor's first interaction
+       anywhere on the page (see js/site.js). -->
   <div class="hero-media">
-    <div id="hero-vsl-player"></div>
+    <video id="hero-vsl-video" autoplay muted playsinline preload="auto" disablepictureinpicture disableremoteplayback>
+      <source src="videos/hero-vsl.mp4" type="video/mp4">
+    </video>
   </div>
 </header>
 

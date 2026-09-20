@@ -256,9 +256,14 @@ a { color: inherit; }
 }
 .hero-media video { background: var(--bg-alt); }
 
-/* Landing-page hero VSL is ambient: no clicking, tapping, or dragging can
-   reach it, so it can't be paused, seeked, or muted. */
-#hero-vsl-player { pointer-events: none; }
+/* Landing-page hero VSL: plays at its original aspect ratio (letterboxed,
+   never cropped), and is pointer-events:none so no clicking, tapping, or
+   dragging can reach it — it can't be paused, seeked, or muted. */
+#hero-vsl-video {
+  object-fit: contain;
+  background: var(--bg);
+  pointer-events: none;
+}
 
 .vsl-unmute-btn {
   position: absolute;
