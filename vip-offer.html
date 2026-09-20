@@ -39,13 +39,12 @@
     </div>
   </div>
 
-  <!-- Self-hosted: no YouTube chrome/branding. Autoplays muted (browser policy)
-       then unmutes on the visitor's first interaction anywhere on the page; the
-       Keep Free Ticket / Upgrade to VIP buttons stay hidden until the video's
-       final 10 seconds (see js/site.js). Native controls stay on, so visitors
-       can pause/rewind like any normal video. -->
+  <!-- Self-hosted: no YouTube chrome/branding, no native controls. Autoplays
+       muted (browser policy) then unmutes on the visitor's first interaction
+       anywhere on the page; the Keep Free Ticket / Upgrade to VIP buttons
+       stay hidden until the video's final 10 seconds (see js/site.js). -->
   <div class="hero-media">
-    <video id="vsl-video" autoplay muted controls playsinline preload="auto">
+    <video id="vsl-video" autoplay muted playsinline preload="auto">
       <source src="videos/vip-vsl.mp4" type="video/mp4">
     </video>
   </div>

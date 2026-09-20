@@ -255,10 +255,15 @@ a { color: inherit; }
 .hero-media video { background: var(--bg-alt); }
 
 /* Landing-page hero VSL: no clicking, tapping, or dragging can reach it, so
-   it can't be paused, seeked, muted, or fullscreened; plays at its original
-   aspect ratio (letterboxed, never cropped). */
+   it can't be paused, seeked, muted, or fullscreened. Both self-hosted
+   videos play at their original aspect ratio (letterboxed, never cropped),
+   matching how they were actually shot instead of being zoomed/cropped to
+   fill the box. */
 #hero-vsl-video {
   pointer-events: none;
+}
+#hero-vsl-video,
+#vsl-video {
   object-fit: contain;
   background: var(--bg);
 }
