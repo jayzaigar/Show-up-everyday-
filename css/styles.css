@@ -267,6 +267,14 @@ a { color: inherit; }
   object-fit: contain;
   background: var(--bg);
 }
+/* Both videos are natively 16:9; matching the box to that ratio (instead of
+   the taller 4:5 mobile default meant for cropped photos) means
+   object-fit: contain has nothing to letterbox — no dead black space above
+   or below the video. */
+.hero-media:has(#hero-vsl-video),
+.hero-media:has(#vsl-video) {
+  aspect-ratio: 16 / 9;
+}
 
 @media (min-width: 860px) {
   .hero-media { max-width: var(--max-width); margin-inline: auto; aspect-ratio: 16 / 9; }
