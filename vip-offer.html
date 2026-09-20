@@ -14,8 +14,8 @@
 <body>
 
 <!--
-  VIP OFFER CONTENT: price and VSL video are still placeholders. Swap in
-  the real price and video once Sandra provides them.
+  VIP OFFER CONTENT: price is still a placeholder. Swap in the real price
+  once Sandra provides it.
 -->
 
 <!-- HERO -->
@@ -39,19 +39,10 @@
     </div>
   </div>
 
-  <!-- VSL: add the real <source src="..."> below once the VIP VSL is ready. Once a source is
-       present, the placeholder overlay hides itself and the Keep Free Ticket / Upgrade to VIP
-       buttons stay hidden until the video's final 10 seconds (see js/site.js). -->
+  <!-- VSL: the Keep Free Ticket / Upgrade to VIP buttons stay hidden until the video's
+       final 10 seconds, via the YouTube IFrame API (see js/site.js). -->
   <div class="hero-media">
-    <video id="vsl-video" playsinline poster="">
-      <!-- <source src="[INSERT VIP VSL VIDEO URL]" type="video/mp4"> -->
-    </video>
-    <div class="hero-media-overlay" id="vsl-placeholder">
-      <div class="play-badge" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6 4.5 17 11 6 17.5V4.5Z" fill="currentColor"/></svg>
-      </div>
-      <span class="hero-media-label">[VIP VSL VIDEO PLACEHOLDER]</span>
-    </div>
+    <div id="vsl-player"></div>
   </div>
 </header>
 

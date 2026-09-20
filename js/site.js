@@ -118,27 +118,46 @@ if (revealEls.length) {
 // VSL-gated path choice (only present on vip-offer.html): the Keep Free
 // Ticket / Upgrade to VIP buttons stay hidden until the VSL's final 10
 // seconds, then fade in.
-const vslVideo = document.getElementById('vsl-video');
-const vslOverlay = document.getElementById('vsl-placeholder');
+const vslPlayerEl = document.getElementById('vsl-player');
 const pathChoice = document.querySelector('.path-choice');
 
-if (pathChoice) {
-  const revealPath = () => pathChoice.classList.add('is-visible');
-  const hasSource = vslVideo && vslVideo.querySelector('source[src]');
+if (pathChoice && vslPlayerEl) {
+  let revealed = false;
+  const revealPath = () => {
+    if (revealed) return;
+    revealed = true;
+    pathChoice.classList.add('is-visible');
+  };
 
-  if (hasSource) {
-    if (vslOverlay) vslOverlay.hidden = true;
-    vslVideo.setAttribute('controls', '');
-    vslVideo.addEventListener('timeupdate', () => {
-      if (vslVideo.duration && vslVideo.duration - vslVideo.currentTime <= 10) {
-        revealPath();
-      }
+  let progressTimer = null;
+  window.onYouTubeIframeAPIReady = () => {
+    new YT.Player('vsl-player', {
+      videoId: 'Ae_Y2XhjISY',
+      width: '100%',
+      height: '100%',
+      playerVars: { rel: 0, playsinline: 1 },
+      events: {
+        onStateChange: (event) => {
+          clearInterval(progressTimer);
+          if (event.data === YT.PlayerState.PLAYING) {
+            progressTimer = setInterval(() => {
+              const duration = event.target.getDuration();
+              const current = event.target.getCurrentTime();
+              if (duration && duration - current <= 10) revealPath();
+            }, 1000);
+          } else if (event.data === YT.PlayerState.ENDED) {
+            revealPath();
+          }
+        },
+      },
     });
-    vslVideo.addEventListener('ended', revealPath);
-  } else {
-    // No real VSL wired up yet: don't block the page on a video that
-    // doesn't exist. Remove this branch once a real <source> is added
-    // to #vsl-video in vip-offer.html.
-    revealPath();
-  }
+  };
+
+  const apiTag = document.createElement('script');
+  apiTag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(apiTag);
+} else if (pathChoice) {
+  // No VSL player on the page: don't block the path choice on a video
+  // that doesn't exist.
+  pathChoice.classList.add('is-visible');
 }
