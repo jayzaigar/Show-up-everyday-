@@ -60,14 +60,14 @@
       <a href="#register" class="btn btn-primary btn-lg">Save My Spot</a>
     </div>
   </div>
-  <!-- Self-hosted: zero YouTube chrome/branding, no play/pause or seek (no
-       controls attribute, and CSS makes it pointer-events:none). Starts
-       muted (browser policy) then unmutes on the visitor's first interaction
-       anywhere on the page (see js/site.js). -->
+  <!-- Temporary YouTube embed (swap back to the self-hosted <video> once
+       videos/hero-vsl.mp4 is pushed). Native chrome is stripped via
+       controls:0 and the iframe is pointer-events:none, so it can't be
+       paused, seeked, or fullscreened; it starts muted (browser policy)
+       then unmutes on the visitor's first interaction anywhere on the page
+       (see js/site.js). -->
   <div class="hero-media">
-    <video id="hero-vsl-video" autoplay muted playsinline preload="auto" disablepictureinpicture disableremoteplayback>
-      <source src="videos/hero-vsl.mp4" type="video/mp4">
-    </video>
+    <div id="hero-vsl-player"></div>
   </div>
 </header>
 

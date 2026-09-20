@@ -256,13 +256,18 @@ a { color: inherit; }
 }
 .hero-media video { background: var(--bg-alt); }
 
-/* Landing-page hero VSL: plays at its original aspect ratio (letterboxed,
-   never cropped), and is pointer-events:none so no clicking, tapping, or
-   dragging can reach it — it can't be paused, seeked, or muted. */
+/* Landing-page hero VSL: no clicking, tapping, or dragging can reach it, so
+   it can't be paused, seeked, muted, or fullscreened. (#hero-vsl-player is
+   the current YouTube embed; #hero-vsl-video is the self-hosted <video>
+   this swaps back to once videos/hero-vsl.mp4 is pushed — it also plays at
+   its original aspect ratio via object-fit: contain, never cropped.) */
+#hero-vsl-player,
+#hero-vsl-video {
+  pointer-events: none;
+}
 #hero-vsl-video {
   object-fit: contain;
   background: var(--bg);
-  pointer-events: none;
 }
 
 .vsl-unmute-btn {
