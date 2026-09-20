@@ -115,10 +115,12 @@ if (revealEls.length) {
   }
 }
 
-// VSL videos: autoplay muted on load (browsers block unmuted autoplay), with
-// a click-to-unmute button. On vip-offer.html only, the Keep Free Ticket /
-// Upgrade to VIP buttons also stay hidden until the video's final 10
-// seconds, then fade in.
+// VSL videos: autoplay muted on load (browsers block unmuted autoplay).
+// The landing-page hero video is pure ambient background: no native
+// YouTube chrome, and pointer-events:none on its iframe means it can't be
+// paused, seeked, or fullscreened. The VIP page video keeps a click-to-
+// unmute button, and — only there — the Keep Free Ticket / Upgrade to VIP
+// buttons stay hidden until the video's final 10 seconds, then fade in.
 const heroVslPlayerEl = document.getElementById('hero-vsl-player');
 const vipVslPlayerEl = document.getElementById('vsl-player');
 const pathChoice = document.querySelector('.path-choice');
@@ -145,7 +147,11 @@ if (heroVslPlayerEl || vipVslPlayerEl) {
   // rel:0 keeps YouTube's end-of-video "recommended videos" grid limited to
   // this channel's own uploads; YouTube doesn't offer a way to remove it
   // entirely from an embed.
-  const commonPlayerVars = { autoplay: 1, mute: 1, rel: 0, playsinline: 1 };
+  const basePlayerVars = { autoplay: 1, mute: 1, rel: 0, playsinline: 1 };
+  // controls:0 (plus disablekb/fs) strips YouTube's title bar and control
+  // bar entirely; the iframe itself is also set pointer-events:none in CSS
+  // so nothing short of removing that CSS can pause, seek, or mute it.
+  const heroPlayerVars = { ...basePlayerVars, controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3 };
   let revealed = false;
   const revealPath = () => {
     if (revealed || !pathChoice) return;
@@ -155,11 +161,11 @@ if (heroVslPlayerEl || vipVslPlayerEl) {
 
   window.onYouTubeIframeAPIReady = () => {
     if (heroVslPlayerEl) {
-      const heroPlayer = new YT.Player('hero-vsl-player', {
+      new YT.Player('hero-vsl-player', {
         videoId: 'TflvXmt7Da0',
         width: '100%',
         height: '100%',
-        playerVars: commonPlayerVars,
+        playerVars: heroPlayerVars,
         events: {
           onReady: (event) => {
             event.target.mute();
@@ -167,7 +173,6 @@ if (heroVslPlayerEl || vipVslPlayerEl) {
           },
         },
       });
-      wireVslUnmuteButton(document.getElementById('hero-vsl-unmute'), () => heroPlayer);
     }
 
     if (vipVslPlayerEl) {
@@ -176,7 +181,7 @@ if (heroVslPlayerEl || vipVslPlayerEl) {
         videoId: 'Ae_Y2XhjISY',
         width: '100%',
         height: '100%',
-        playerVars: commonPlayerVars,
+        playerVars: basePlayerVars,
         events: {
           onReady: (event) => {
             event.target.mute();

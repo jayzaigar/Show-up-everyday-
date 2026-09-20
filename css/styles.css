@@ -256,6 +256,10 @@ a { color: inherit; }
 }
 .hero-media video { background: var(--bg-alt); }
 
+/* Landing-page hero VSL is ambient: no clicking, tapping, or dragging can
+   reach it, so it can't be paused, seeked, or muted. */
+#hero-vsl-player { pointer-events: none; }
+
 .vsl-unmute-btn {
   position: absolute;
   right: 16px;
