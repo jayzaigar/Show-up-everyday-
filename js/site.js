@@ -115,16 +115,26 @@ if (revealEls.length) {
   }
 }
 
-// VSL videos: autoplay muted on load (browsers block unmuted autoplay).
-// Landing-page hero video is temporarily YouTube-hosted again (swap back to
-// the self-hosted <video id="hero-vsl-video"> once videos/hero-vsl.mp4 is
-// pushed) — no native chrome, and pointer-events:none on its iframe means
-// it can't be paused, seeked, or fullscreened. It unmutes automatically on
-// the visitor's first interaction anywhere on the page, no button needed.
-// The VIP page video keeps a click-to-unmute button, and — only there —
-// the Keep Free Ticket / Upgrade to VIP buttons stay hidden until the
-// video's final 10 seconds, then fade in.
-const heroVslPlayerEl = document.getElementById('hero-vsl-player');
+// Landing-page hero video: self-hosted (no YouTube chrome, ever), muted
+// autoplay since browsers block autoplay with sound, then unmuted
+// automatically the instant the visitor does anything at all on the page
+// (scroll, tap, click, key press) — no dedicated control needed. It has no
+// `controls` attribute and CSS makes it pointer-events:none, so it can't be
+// paused, seeked, or fullscreened either.
+const heroVslVideoEl = document.getElementById('hero-vsl-video');
+if (heroVslVideoEl) {
+  const unmuteHero = () => {
+    heroVslVideoEl.muted = false;
+    heroVslVideoEl.volume = 1;
+  };
+  ['click', 'touchstart', 'scroll', 'keydown'].forEach((type) => {
+    document.addEventListener(type, unmuteHero, { passive: true, once: true });
+  });
+}
+
+// VIP page VSL (YouTube-hosted): autoplay muted with a click-to-unmute
+// button, and the Keep Free Ticket / Upgrade to VIP buttons stay hidden
+// until the video's final 10 seconds, then fade in.
 const vipVslPlayerEl = document.getElementById('vsl-player');
 const pathChoice = document.querySelector('.path-choice');
 
@@ -146,15 +156,11 @@ function wireVslUnmuteButton(btn, getPlayer) {
   });
 }
 
-if (heroVslPlayerEl || vipVslPlayerEl) {
+if (vipVslPlayerEl) {
   // rel:0 keeps YouTube's end-of-video "recommended videos" grid limited to
   // this channel's own uploads; YouTube doesn't offer a way to remove it
   // entirely from an embed.
-  const basePlayerVars = { autoplay: 1, mute: 1, rel: 0, playsinline: 1 };
-  // controls:0 (plus disablekb/fs) strips YouTube's title bar and control
-  // bar entirely; the iframe itself is also set pointer-events:none in CSS
-  // so nothing short of removing that CSS can pause, seek, or mute it.
-  const heroPlayerVars = { ...basePlayerVars, controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3 };
+  const vipPlayerVars = { autoplay: 1, mute: 1, rel: 0, playsinline: 1 };
   let revealed = false;
   const revealPath = () => {
     if (revealed || !pathChoice) return;
@@ -163,67 +169,32 @@ if (heroVslPlayerEl || vipVslPlayerEl) {
   };
 
   window.onYouTubeIframeAPIReady = () => {
-    if (heroVslPlayerEl) {
-      let heroReady = null;
-      let unmuteRequested = false;
-      const tryUnmuteHero = () => {
-        if (heroReady) {
-          heroReady.unMute();
-          heroReady.setVolume(100);
-        } else {
-          unmuteRequested = true;
-        }
-      };
-      new YT.Player('hero-vsl-player', {
-        videoId: 'TflvXmt7Da0',
-        width: '100%',
-        height: '100%',
-        playerVars: heroPlayerVars,
-        events: {
-          onReady: (event) => {
-            event.target.mute();
-            event.target.playVideo();
-            heroReady = event.target;
-            if (unmuteRequested) {
-              event.target.unMute();
-              event.target.setVolume(100);
-            }
-          },
+    let progressTimer = null;
+    const vipPlayer = new YT.Player('vsl-player', {
+      videoId: 'Ae_Y2XhjISY',
+      width: '100%',
+      height: '100%',
+      playerVars: vipPlayerVars,
+      events: {
+        onReady: (event) => {
+          event.target.mute();
+          event.target.playVideo();
         },
-      });
-      ['click', 'touchstart', 'scroll', 'keydown'].forEach((type) => {
-        document.addEventListener(type, tryUnmuteHero, { passive: true, once: true });
-      });
-    }
-
-    if (vipVslPlayerEl) {
-      let progressTimer = null;
-      const vipPlayer = new YT.Player('vsl-player', {
-        videoId: 'Ae_Y2XhjISY',
-        width: '100%',
-        height: '100%',
-        playerVars: basePlayerVars,
-        events: {
-          onReady: (event) => {
-            event.target.mute();
-            event.target.playVideo();
-          },
-          onStateChange: (event) => {
-            clearInterval(progressTimer);
-            if (event.data === YT.PlayerState.PLAYING) {
-              progressTimer = setInterval(() => {
-                const duration = event.target.getDuration();
-                const current = event.target.getCurrentTime();
-                if (duration && duration - current <= 10) revealPath();
-              }, 1000);
-            } else if (event.data === YT.PlayerState.ENDED) {
-              revealPath();
-            }
-          },
+        onStateChange: (event) => {
+          clearInterval(progressTimer);
+          if (event.data === YT.PlayerState.PLAYING) {
+            progressTimer = setInterval(() => {
+              const duration = event.target.getDuration();
+              const current = event.target.getCurrentTime();
+              if (duration && duration - current <= 10) revealPath();
+            }, 1000);
+          } else if (event.data === YT.PlayerState.ENDED) {
+            revealPath();
+          }
         },
-      });
-      wireVslUnmuteButton(document.getElementById('vip-vsl-unmute'), () => vipPlayer);
-    }
+      },
+    });
+    wireVslUnmuteButton(document.getElementById('vip-vsl-unmute'), () => vipPlayer);
   };
 
   const apiTag = document.createElement('script');
