@@ -39,14 +39,15 @@
     </div>
   </div>
 
-  <!-- VSL: autoplays muted on load; the Keep Free Ticket / Upgrade to VIP buttons stay
-       hidden until the video's final 10 seconds, via the YouTube IFrame API (see js/site.js). -->
+  <!-- Self-hosted: no YouTube chrome/branding. Autoplays muted (browser policy)
+       then unmutes on the visitor's first interaction anywhere on the page; the
+       Keep Free Ticket / Upgrade to VIP buttons stay hidden until the video's
+       final 10 seconds (see js/site.js). Native controls stay on, so visitors
+       can pause/rewind like any normal video. -->
   <div class="hero-media">
-    <div id="vsl-player"></div>
-    <button type="button" class="vsl-unmute-btn" id="vip-vsl-unmute" aria-label="Unmute video">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3Z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18.5 5.5a9 9 0 0 1 0 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg>
-      <span>Unmute</span>
-    </button>
+    <video id="vsl-video" autoplay muted controls playsinline preload="auto">
+      <source src="videos/vip-vsl.mp4" type="video/mp4">
+    </video>
   </div>
 </header>
 

@@ -115,93 +115,44 @@ if (revealEls.length) {
   }
 }
 
-// Landing-page hero video: self-hosted (no YouTube chrome, ever), muted
-// autoplay since browsers block autoplay with sound, then unmuted
-// automatically the instant the visitor does anything at all on the page
-// (scroll, tap, click, key press) — no dedicated control needed. It has no
-// `controls` attribute and CSS makes it pointer-events:none, so it can't be
-// paused, seeked, or fullscreened either.
-const heroVslVideoEl = document.getElementById('hero-vsl-video');
-if (heroVslVideoEl) {
-  const unmuteHero = () => {
-    heroVslVideoEl.muted = false;
-    heroVslVideoEl.volume = 1;
+// Both hero (landing page) and VSL (VIP page) videos are self-hosted: no
+// YouTube chrome/branding at all. Both start muted (browsers block
+// unmuted autoplay) and unmute automatically the instant the visitor does
+// anything at all on the page (scroll, tap, click, key press).
+function autoUnmuteOnInteraction(videoEl) {
+  const unmute = () => {
+    videoEl.muted = false;
+    videoEl.volume = 1;
   };
   ['click', 'touchstart', 'scroll', 'keydown'].forEach((type) => {
-    document.addEventListener(type, unmuteHero, { passive: true, once: true });
+    document.addEventListener(type, unmute, { passive: true, once: true });
   });
 }
 
-// VIP page VSL (YouTube-hosted): autoplay muted with a click-to-unmute
-// button, and the Keep Free Ticket / Upgrade to VIP buttons stay hidden
-// until the video's final 10 seconds, then fade in.
-const vipVslPlayerEl = document.getElementById('vsl-player');
+// Landing-page hero video: no `controls` attribute, and CSS makes it
+// pointer-events:none, so it can't be paused, seeked, or fullscreened.
+const heroVslVideoEl = document.getElementById('hero-vsl-video');
+if (heroVslVideoEl) autoUnmuteOnInteraction(heroVslVideoEl);
+
+// VIP page VSL: native controls stay on (visitors can pause/rewind), and
+// the Keep Free Ticket / Upgrade to VIP buttons stay hidden until the
+// video's final 10 seconds, then fade in.
+const vslVideoEl = document.getElementById('vsl-video');
 const pathChoice = document.querySelector('.path-choice');
-
-function wireVslUnmuteButton(btn, getPlayer) {
-  if (!btn) return;
-  const label = btn.querySelector('span');
-  btn.addEventListener('click', () => {
-    const player = getPlayer();
-    if (!player || typeof player.isMuted !== 'function') return;
-    if (player.isMuted()) {
-      player.unMute();
-      if (label) label.textContent = 'Mute';
-      btn.setAttribute('aria-label', 'Mute video');
-    } else {
-      player.mute();
-      if (label) label.textContent = 'Unmute';
-      btn.setAttribute('aria-label', 'Unmute video');
-    }
-  });
-}
-
-if (vipVslPlayerEl) {
-  // rel:0 keeps YouTube's end-of-video "recommended videos" grid limited to
-  // this channel's own uploads; YouTube doesn't offer a way to remove it
-  // entirely from an embed.
-  const vipPlayerVars = { autoplay: 1, mute: 1, rel: 0, playsinline: 1 };
+if (vslVideoEl) {
+  autoUnmuteOnInteraction(vslVideoEl);
   let revealed = false;
   const revealPath = () => {
-    if (revealed || !pathChoice) return;
+    if (revealed) return;
     revealed = true;
     pathChoice.classList.add('is-visible');
   };
-
-  window.onYouTubeIframeAPIReady = () => {
-    let progressTimer = null;
-    const vipPlayer = new YT.Player('vsl-player', {
-      videoId: 'Ae_Y2XhjISY',
-      width: '100%',
-      height: '100%',
-      playerVars: vipPlayerVars,
-      events: {
-        onReady: (event) => {
-          event.target.mute();
-          event.target.playVideo();
-        },
-        onStateChange: (event) => {
-          clearInterval(progressTimer);
-          if (event.data === YT.PlayerState.PLAYING) {
-            progressTimer = setInterval(() => {
-              const duration = event.target.getDuration();
-              const current = event.target.getCurrentTime();
-              if (duration && duration - current <= 10) revealPath();
-            }, 1000);
-          } else if (event.data === YT.PlayerState.ENDED) {
-            revealPath();
-          }
-        },
-      },
-    });
-    wireVslUnmuteButton(document.getElementById('vip-vsl-unmute'), () => vipPlayer);
-  };
-
-  const apiTag = document.createElement('script');
-  apiTag.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(apiTag);
+  vslVideoEl.addEventListener('timeupdate', () => {
+    if (vslVideoEl.duration && vslVideoEl.duration - vslVideoEl.currentTime <= 10) revealPath();
+  });
+  vslVideoEl.addEventListener('ended', revealPath);
 } else if (pathChoice) {
-  // No VSL player on the page: don't block the path choice on a video
-  // that doesn't exist.
+  // No VSL video on the page: don't block the path choice on a video that
+  // doesn't exist.
   pathChoice.classList.add('is-visible');
 }

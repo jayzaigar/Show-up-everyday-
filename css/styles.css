@@ -244,10 +244,8 @@ a { color: inherit; }
   animation: fade-up-in .9s var(--ease) .12s both;
 }
 .hero-media img, .hero-media video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
-.hero-media iframe, .hero-media > div { width: 100%; height: 100%; border: 0; display: block; }
 .hero-media:has(> img)::after,
-.hero-media:has(> video source[src])::after,
-.hero-media:has(iframe)::after {
+.hero-media:has(> video source[src])::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -256,39 +254,14 @@ a { color: inherit; }
 }
 .hero-media video { background: var(--bg-alt); }
 
-/* Landing-page hero VSL: self-hosted (#hero-vsl-video), no clicking,
-   tapping, or dragging can reach it, so it can't be paused, seeked, muted,
-   or fullscreened. (#hero-vsl-player would be a YouTube-embed fallback,
-   currently unused.) */
-#hero-vsl-player,
+/* Landing-page hero VSL: no clicking, tapping, or dragging can reach it, so
+   it can't be paused, seeked, muted, or fullscreened; plays at its original
+   aspect ratio (letterboxed, never cropped). */
 #hero-vsl-video {
   pointer-events: none;
-}
-#hero-vsl-video {
   object-fit: contain;
   background: var(--bg);
 }
-
-.vsl-unmute-btn {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background: rgba(11,11,11,0.6);
-  backdrop-filter: blur(4px);
-  color: var(--white);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: background .2s ease, border-color .2s ease;
-}
-.vsl-unmute-btn:hover { background: rgba(11,11,11,0.8); border-color: rgba(255,255,255,0.6); }
 
 @media (min-width: 860px) {
   .hero-media { max-width: var(--max-width); margin-inline: auto; aspect-ratio: 16 / 9; }
