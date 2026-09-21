@@ -148,25 +148,10 @@ if (heroVslVideoEl) {
 }
 
 // VIP page VSL: no `controls` attribute either, so visitors can't pause or
-// seek it, and the Keep Free Ticket / Upgrade to VIP buttons stay hidden
-// until the video's final 10 seconds, then fade in.
+// seek it. The Keep Free Ticket / Upgrade to VIP buttons are visible the
+// whole time (see .path-choice in css/styles.css).
 const vslVideoEl = document.getElementById('vsl-video');
-const pathChoice = document.querySelector('.path-choice');
 if (vslVideoEl) {
   autoUnmuteOnInteraction(vslVideoEl);
   wireProgressBar(vslVideoEl, document.getElementById('vsl-progress'));
-  let revealed = false;
-  const revealPath = () => {
-    if (revealed) return;
-    revealed = true;
-    pathChoice.classList.add('is-visible');
-  };
-  vslVideoEl.addEventListener('timeupdate', () => {
-    if (vslVideoEl.duration && vslVideoEl.duration - vslVideoEl.currentTime <= 10) revealPath();
-  });
-  vslVideoEl.addEventListener('ended', revealPath);
-} else if (pathChoice) {
-  // No VSL video on the page: don't block the path choice on a video that
-  // doesn't exist.
-  pathChoice.classList.add('is-visible');
 }
