@@ -173,6 +173,14 @@ a { color: inherit; }
 
 .center { text-align: center; }
 
+.vip-price {
+  text-align: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.6rem;
+  color: var(--cream);
+  margin: -8px 0 28px;
+}
+
 /* ---------- Hero ---------- */
 .hero {
   position: relative;
@@ -223,8 +231,6 @@ a { color: inherit; }
   margin-top: 14px;
   margin-bottom: 0;
 }
-.access-note { margin-top: 0; margin-bottom: 18px; font-style: italic; }
-
 .hero-media {
   margin-top: 48px;
   width: 100%;
@@ -479,65 +485,6 @@ select:invalid { color: var(--taupe-dim); }
   color: var(--cream);
   font-size: 0.85rem;
   margin: -4px 0 0;
-}
-
-/* ---------- Analyzing overlay ---------- */
-.analyzing-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  opacity: 0;
-  transition: opacity .4s ease;
-}
-.analyzing-overlay.is-active { display: flex; }
-.analyzing-overlay.is-visible { opacity: 1; }
-
-.analyzing-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 24px;
-  max-width: 420px;
-}
-.analyzing-ring {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 28px;
-  border-radius: 50%;
-  border: 2px solid var(--line);
-  border-top-color: var(--cream);
-  animation: analyzing-spin 1s linear infinite;
-}
-@keyframes analyzing-spin {
-  to { transform: rotate(360deg); }
-}
-.analyzing-content h2 {
-  font-size: 1.3rem;
-  margin-bottom: 28px;
-  min-height: 2.4em;
-}
-.analyzing-bar {
-  width: 100%;
-  height: 3px;
-  background: var(--line);
-  border-radius: 0;
-  overflow: hidden;
-}
-.analyzing-bar-fill {
-  width: 0%;
-  height: 100%;
-  background: var(--white);
-  transition: width 5s linear;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .analyzing-ring { animation: none; }
-  .analyzing-overlay { transition: none; }
-  .analyzing-bar-fill { transition: none; }
 }
 
 /* ---------- Social proof ---------- */

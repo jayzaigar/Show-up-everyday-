@@ -121,17 +121,6 @@
   </div>
 </div>
 
-<!-- ANALYZING OVERLAY: shown for a few seconds after finishing (or skipping)
-     the survey, before landing on vip-offer.html. Purely perceived-value UX. -->
-<div class="analyzing-overlay" id="analyzing-overlay" role="status" aria-live="polite">
-  <div class="grain" aria-hidden="true"></div>
-  <div class="analyzing-content">
-    <div class="analyzing-ring" aria-hidden="true"></div>
-    <h2 id="analyzing-message">Analyzing your answers</h2>
-    <div class="analyzing-bar"><div class="analyzing-bar-fill" id="analyzing-bar-fill"></div></div>
-  </div>
-</div>
-
 <script src="js/site.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
@@ -152,15 +141,7 @@
   }
 
   function goToVipOffer() {
-    const destination = name ? `vip-offer.html?name=${encodeURIComponent(name)}` : 'vip-offer.html';
-    const messages = [
-      'Analyzing your answers',
-      'Matching you to the right track',
-      'Almost there',
-    ];
-    runAnalyzingSequence(messages, 5000, () => {
-      window.location.href = destination;
-    });
+    window.location.href = name ? `vip-offer.html?name=${encodeURIComponent(name)}` : 'vip-offer.html';
   }
 
   // Auto-advance to the next question a beat after picking an option, except

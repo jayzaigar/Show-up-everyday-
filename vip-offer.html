@@ -17,10 +17,6 @@
 </head>
 <body>
 
-<!--
-  VIP OFFER CONTENT: price is still a placeholder. Swap in the real price
-  once Sandra provides it.
--->
 
 <!-- HERO -->
 <header class="hero" id="hero">
@@ -34,7 +30,6 @@
   <div class="container hero-inner">
     <div class="hero-copy">
       <span class="eyebrow">Before You Go</span>
-      <p class="microcopy access-note">This page is shared with a small group only.</p>
       <h1>Show Up Everyday VIP Offer</h1>
       <p class="subhead">
         Everything in the free series, plus the prompts, worksheets and live support to actually
@@ -61,6 +56,7 @@
     <div class="container narrow reveal">
       <span class="eyebrow center">What's included</span>
       <h2>What you get with VIP</h2>
+      <p class="vip-price">VIP Pass: $3</p>
       <ul class="who-for-list">
         <li>
           <strong>10 ready-to-use prompts, delivered instantly.</strong>
@@ -84,29 +80,16 @@
     <div class="grain" aria-hidden="true"></div>
     <div class="container narrow center reveal" style="position:relative; z-index:1;">
       <span class="eyebrow center">Your next step</span>
-      <h2>Keep your free ticket, or upgrade to VIP</h2>
-      <p class="section-intro">Either way, you're set for The Show Up Everyday Series. The choice is yours.</p>
+      <h2>Want extra support this week?</h2>
+      <p class="section-intro">You're already set for the free series. Upgrade to VIP for $3 if you want the prompts, worksheets and live support too.</p>
 
       <div class="path-choice">
-        <a href="join-whatsapp-free.html" id="keep-free-link" class="btn btn-outline btn-lg">Keep Free Ticket</a>
-        <a href="https://whop.com/checkout/plan_d81AJ8Eqt1xcb" class="btn btn-primary btn-lg">Upgrade to VIP</a>
+        <a href="https://whop.com/checkout/plan_d81AJ8Eqt1xcb" class="btn btn-primary btn-lg">Upgrade to VIP &mdash; $3</a>
       </div>
-      <p class="microcopy">Keeping the free ticket? Your spot isn't secured until you join the WhatsApp group on the next screen.</p>
     </div>
   </section>
 
 </main>
-
-<!-- ANALYZING OVERLAY: shown for a few seconds after choosing to keep the free
-     ticket, before landing on join-whatsapp-free.html. Purely perceived-value UX. -->
-<div class="analyzing-overlay" id="analyzing-overlay" role="status" aria-live="polite">
-  <div class="grain" aria-hidden="true"></div>
-  <div class="analyzing-content">
-    <div class="analyzing-ring" aria-hidden="true"></div>
-    <h2 id="analyzing-message">Locking in your free ticket</h2>
-    <div class="analyzing-bar"><div class="analyzing-bar-fill" id="analyzing-bar-fill"></div></div>
-  </div>
-</div>
 
 <footer class="site-footer">
   <p>&copy; SSELFIE.ai · The Show Up Everyday Series</p>
@@ -142,22 +125,6 @@
       }
     );
   })();
-</script>
-<script>
-  const keepFreeLink = document.getElementById('keep-free-link');
-  keepFreeLink.addEventListener('click', (event) => {
-    event.preventDefault();
-    const destination = keepFreeLink.getAttribute('href');
-    const messages = [
-      'Locking in your free ticket',
-      'Setting up your access',
-      'Getting your group ready',
-      'Almost there',
-    ];
-    runAnalyzingSequence(messages, 5000, () => {
-      window.location.href = destination;
-    });
-  });
 </script>
 </body>
 </html>

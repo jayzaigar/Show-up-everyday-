@@ -43,7 +43,7 @@ form.addEventListener('submit', async (event) => {
   };
 
   // Fire the actual submission in the background; it doesn't need to block
-  // the analyzing sequence below.
+  // the Airtable write and redirect below.
   if (FORM_ENDPOINT) {
     fetch(FORM_ENDPOINT, {
       method: 'POST',
@@ -64,17 +64,9 @@ form.addEventListener('submit', async (event) => {
     Consent: consent,
   });
 
-  const messages = [
-    'Reviewing what you shared',
-    'Matching your answers to the right track',
-    'Personalizing your experience',
-    'Saving your spot',
-  ];
-  runAnalyzingSequence(messages, 5000, () => {
-    const query = new URLSearchParams({ name: firstName });
-    if (recordId) query.set('rid', recordId);
-    window.location.href = `confirmation.html?${query.toString()}`;
-  });
+  const query = new URLSearchParams({ name: firstName });
+  if (recordId) query.set('rid', recordId);
+  window.location.href = `confirmation.html?${query.toString()}`;
 });
 
 function isValidEmail(value) {
