@@ -89,6 +89,11 @@ function autoUnmuteOnInteraction(videoEl) {
   const unmute = () => {
     videoEl.muted = false;
     videoEl.volume = 1;
+    // A genuine user gesture (this listener only fires on one) can start
+    // playback even when the browser blocked the autoplay attribute itself
+    // (e.g. iOS Low Power Mode disables autoplaying video outright) - so if
+    // it never actually started, this is the fallback that gets it moving.
+    videoEl.play().catch(() => {});
   };
   ['click', 'touchstart', 'scroll', 'keydown'].forEach((type) => {
     document.addEventListener(type, unmute, { passive: true, once: true });
@@ -109,6 +114,7 @@ function wireProgressBar(videoEl, fillEl) {
 // pointer-events:none, so it can't be paused, seeked, or fullscreened.
 const heroVslVideoEl = document.getElementById('hero-vsl-video');
 if (heroVslVideoEl) {
+  heroVslVideoEl.play().catch(() => {});
   autoUnmuteOnInteraction(heroVslVideoEl);
   wireProgressBar(heroVslVideoEl, document.getElementById('hero-vsl-progress'));
 }
@@ -117,6 +123,7 @@ if (heroVslVideoEl) {
 // seek it.
 const vslVideoEl = document.getElementById('vsl-video');
 if (vslVideoEl) {
+  vslVideoEl.play().catch(() => {});
   autoUnmuteOnInteraction(vslVideoEl);
   wireProgressBar(vslVideoEl, document.getElementById('vsl-progress'));
 }
