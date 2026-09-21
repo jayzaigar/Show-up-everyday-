@@ -140,7 +140,7 @@ and decorative motion isn't worth the distraction there.
 
 ## The hero countdown on index.html
 
-A custom split-flap digit display counts down to the first live day (October 4, 2026, 7PM Cape Town time / SAST),
+A custom split-flap digit display counts down to the first live day (October 4, 2026, 7PM CEST),
 sitting between the event facts and the "Save My Spot" button. No external dependency, pure vanilla
 JS/CSS. Days/Hrs/Min/Sec, each digit built from seven clip-path bar segments (matching a real
 seven-segment display), lit or dimmed via a `--act` custom property per digit value. Once the target
@@ -259,7 +259,7 @@ own sales list for who's paid, find that person's row in Airtable (search by ema
 - `FORM_ENDPOINT` in `js/main.js` is an optional second hook, if you also want registrations sent to an
   ESP/automation tool (Resend, ManyChat, etc.) in addition to Airtable. Leave it empty to skip that.
 
-Dates (October 4–8, 2026, 7PM Cape Town time / SAST, UTC+2) are already filled in across `index.html`'s hero, registration
+The start date (October 4, 2026, 7PM CEST / UTC+2) is already filled in across `index.html`'s hero, registration
 section, and final CTA. Update there if they change.
 
 ## Local preview
