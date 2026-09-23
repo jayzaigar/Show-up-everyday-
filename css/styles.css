@@ -421,18 +421,6 @@ a { color: inherit; }
   .day-trail-svg, .day-trail-icon, .day-trail-stop { display: none; }
 }
 
-/* ---------- Why-free ---------- */
-.why-free-quote {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.3rem;
-  color: var(--cream);
-  text-align: center;
-  max-width: 620px;
-  margin: 0 auto;
-  line-height: 1.4;
-}
-
 /* ---------- Registration form ---------- */
 .register-form {
   display: grid;
