@@ -252,24 +252,19 @@ a { color: inherit; }
 .hero-media video { background: var(--bg-alt); }
 
 /* Landing-page hero VSL: no clicking, tapping, or dragging can reach it, so
-   it can't be paused, seeked, muted, or fullscreened. Both self-hosted
-   videos play at their original aspect ratio (letterboxed, never cropped),
-   matching how they were actually shot instead of being zoomed/cropped to
-   fill the box. */
+   it can't be paused, seeked, muted, or fullscreened. Plays at its original
+   aspect ratio (letterboxed, never cropped), matching how it was actually
+   shot instead of being zoomed/cropped to fill the box. */
 #hero-vsl-video {
   pointer-events: none;
-}
-#hero-vsl-video,
-#vsl-video {
   object-fit: contain;
   background: var(--bg);
 }
-/* Both videos are natively 16:9; matching the box to that ratio (instead of
+/* The video is natively 16:9; matching the box to that ratio (instead of
    the taller 4:5 mobile default meant for cropped photos) means
    object-fit: contain has nothing to letterbox — no dead black space above
    or below the video. */
-.hero-media:has(#hero-vsl-video),
-.hero-media:has(#vsl-video) {
+.hero-media:has(#hero-vsl-video) {
   aspect-ratio: 16 / 9;
 }
 

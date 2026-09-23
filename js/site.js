@@ -81,10 +81,10 @@ if (revealEls.length) {
   }
 }
 
-// Both hero (landing page) and VSL (VIP page) videos are self-hosted: no
-// YouTube chrome/branding at all. Both start muted (browsers block
-// unmuted autoplay) and unmute automatically the instant the visitor does
-// anything at all on the page (scroll, tap, click, key press).
+// The hero video is self-hosted: no YouTube chrome/branding at all. Starts
+// muted (browsers block unmuted autoplay) and unmutes automatically the
+// instant the visitor does anything at all on the page (scroll, tap,
+// click, key press).
 function autoUnmuteOnInteraction(videoEl) {
   const unmute = () => {
     videoEl.muted = false;
@@ -110,20 +110,12 @@ function wireProgressBar(videoEl, fillEl) {
   });
 }
 
-// Landing-page hero video: no `controls` attribute, and CSS makes it
+// Landing-page hero video (the only video in the funnel now - the VIP page
+// no longer has its own VSL): no `controls` attribute, and CSS makes it
 // pointer-events:none, so it can't be paused, seeked, or fullscreened.
 const heroVslVideoEl = document.getElementById('hero-vsl-video');
 if (heroVslVideoEl) {
   heroVslVideoEl.play().catch(() => {});
   autoUnmuteOnInteraction(heroVslVideoEl);
   wireProgressBar(heroVslVideoEl, document.getElementById('hero-vsl-progress'));
-}
-
-// VIP page VSL: no `controls` attribute either, so visitors can't pause or
-// seek it.
-const vslVideoEl = document.getElementById('vsl-video');
-if (vslVideoEl) {
-  vslVideoEl.play().catch(() => {});
-  autoUnmuteOnInteraction(vslVideoEl);
-  wireProgressBar(vslVideoEl, document.getElementById('vsl-progress'));
 }

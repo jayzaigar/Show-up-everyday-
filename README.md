@@ -164,21 +164,6 @@ refresh cycle (it did, in testing, animate from opacity 0 back to opacity 0). Sa
 the day-trail: if GSAP or ScrollTrigger fail to load, or `prefers-reduced-motion` is set, the cards just
 show normally with no animation.
 
-## The VSL-gated buttons on vip-offer.html
-
-The Keep Free Ticket / Upgrade to VIP buttons stay hidden (and unclickable) until the VSL reaches its
-last 10 seconds, then fade in. This is wired up in `js/site.js` against `<video id="vsl-video">` in
-`vip-offer.html`. Until a real `<source>` is added to that video, there's nothing to watch, so the
-buttons show immediately instead of waiting on a video that doesn't exist. Once you add the real VSL:
-
-1. In `vip-offer.html`, uncomment the `<source src="...">` line inside `#vsl-video` and point it at your
-   video file (or swap the whole `<video>` block for a YouTube/Vimeo/Wistia iframe if you're hosting it
-   there instead, in which case you'll want to adjust the gating logic in `js/site.js` to that platform's
-   player API).
-2. The placeholder overlay (`#vsl-placeholder`, the dashed box with the play icon) hides itself
-   automatically once a real `<source>` is present.
-3. The buttons will then stay hidden until 10 seconds before the video ends.
-
 ## Registrations dashboard (Airtable)
 
 Registrant data (name, email, WhatsApp, country, consent, survey answers) is stored in Airtable, and
@@ -243,11 +228,6 @@ own sales list for who's paid, find that person's row in Airtable (search by ema
 
 ## Placeholders still to fill in
 
-- **VIP VSL**: `vip-offer.html`'s headline, offer copy and "What's included" list are filled in. The VSL
-  is still a placeholder (see above); swap in the real video once you have it.
-- **Free-series VSL video**: `index.html`'s hero photo slot is a placeholder (dashed border, play icon,
-  "[VSL VIDEO PLACEHOLDER]" label). Swap the `.hero-media-placeholder` block for the real embed
-  (YouTube/Vimeo/Wistia iframe, or a `<video>` tag) once that VSL is ready.
 - **Headline**: three options for `index.html`'s hero are written out in an HTML comment above the hero.
   The first one is live; swap in a different one by editing the `<h1>`.
 - **Open Graph image**: `index.html`'s `<meta property="og:image">` points to `images/og-cover.jpg`, which
