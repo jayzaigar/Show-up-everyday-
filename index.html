@@ -16,8 +16,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Warms up the connection to Whop as soon as this page loads, so the "Get VIP
+     Pass" button's checkout doesn't have to pay for DNS + TLS handshake on click. -->
+<link rel="preconnect" href="https://whop.com">
+<link rel="dns-prefetch" href="https://whop.com">
 <link rel="stylesheet" href="css/styles.css">
-<noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
+<noscript><style>
+  .reveal { opacity: 1 !important; transform: none !important; }
+  #register.is-hidden { display: block !important; }
+</style></noscript>
 </head>
 <body>
 
@@ -57,7 +64,7 @@
         <span class="eyebrow center">Starts in</span>
       </div>
 
-      <a href="#register" class="btn btn-primary btn-lg">Save My Spot</a>
+      <a href="#choose-path" class="btn btn-primary btn-lg">Save My Spot</a>
     </div>
   </div>
   <!-- Self-hosted: zero YouTube chrome/branding, no play/pause or seek (no
@@ -156,8 +163,42 @@
     </div>
   </section>
 
-  <!-- 5. REGISTRATION FORM -->
-  <section class="section section-alt" id="register">
+  <!-- 5. CHOOSE YOUR PATH -->
+  <section class="section" id="choose-path">
+    <div class="container narrow reveal">
+      <span class="eyebrow center">Pick your path</span>
+      <h2>Free spot, or VIP pass?</h2>
+      <p class="section-intro">Either way, you're in for five live days with Sandra. VIP just adds more support along the way.</p>
+
+      <div class="choice-grid">
+        <div class="choice-card">
+          <h3>Free Spot</h3>
+          <p class="choice-price">$0</p>
+          <ul class="choice-features">
+            <li>Five live days with Sandra</li>
+            <li>Real-time content creation</li>
+            <li>WhatsApp group access</li>
+          </ul>
+          <button type="button" class="btn btn-outline btn-lg btn-full" id="get-free-btn">Get Free Spot</button>
+        </div>
+        <div class="choice-card">
+          <h3>VIP Pass</h3>
+          <p class="choice-price">$3</p>
+          <ul class="choice-features">
+            <li>Everything in the free series</li>
+            <li>10 ready-to-use prompts, delivered instantly</li>
+            <li>A worksheet for every live session</li>
+            <li>A smaller, VIP-only chat room during every session</li>
+          </ul>
+          <a href="https://whop.com/checkout/plan_d81AJ8Eqt1xcb" class="btn btn-primary btn-lg btn-full">Get VIP Pass</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. REGISTRATION FORM: hidden until "Get Free Spot" is chosen above (see
+       js/main.js), so the free/VIP choice comes first. -->
+  <section class="section section-alt is-hidden" id="register">
     <div class="grain" aria-hidden="true"></div>
     <div class="container narrow reveal" style="position:relative; z-index:1;">
       <h2>Reserve your spot</h2>
@@ -243,7 +284,7 @@
     </div>
   </section>
 
-  <!-- 6. SOCIAL PROOF -->
+  <!-- 7. SOCIAL PROOF -->
   <section class="section" id="proof">
     <div class="container narrow reveal">
       <span class="eyebrow center">From past participants</span>
@@ -282,7 +323,7 @@
     </div>
   </section>
 
-  <!-- 7. FAQ -->
+  <!-- 8. FAQ -->
   <section class="section section-alt" id="faq">
     <div class="grain" aria-hidden="true"></div>
     <div class="container narrow reveal" style="position:relative; z-index:1;">
@@ -314,7 +355,7 @@
     </div>
   </section>
 
-  <!-- 8. FINAL CTA -->
+  <!-- 9. FINAL CTA -->
   <section class="section final-cta" id="final-cta">
     <div class="container narrow reveal">
       <h2>Five days. Live with Sandra.</h2>
@@ -324,7 +365,7 @@
       <div class="event-facts">
         <span><strong>Starts:</strong> October 4, 2026</span>
       </div>
-      <a href="#register" class="btn btn-primary btn-lg">Save My Spot</a>
+      <a href="#choose-path" class="btn btn-primary btn-lg">Save My Spot</a>
     </div>
   </section>
 

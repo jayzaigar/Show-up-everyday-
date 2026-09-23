@@ -5,6 +5,18 @@
 // most providers' form-submission APIs.
 const FORM_ENDPOINT = '';
 
+// "Get Free Spot" reveals the registration section (hidden by default, see
+// index.html) and scrolls to it, so the free/VIP choice comes before the
+// form instead of the form being visible right away.
+const registerSection = document.getElementById('register');
+const getFreeBtn = document.getElementById('get-free-btn');
+if (getFreeBtn && registerSection) {
+  getFreeBtn.addEventListener('click', () => {
+    registerSection.classList.remove('is-hidden');
+    registerSection.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
 const form = document.getElementById('register-form');
 const phoneGroup = form.querySelector('.phone-group');
 
