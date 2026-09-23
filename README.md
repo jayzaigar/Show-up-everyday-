@@ -10,62 +10,27 @@ text, thin hairline dividers, no gradients, glow, grain texture or color accents
 
 ```
 index.html (register: first name, email, WhatsApp number, reminder consent)
-  -> [5s analyzing loading screen]
-  -> confirmation.html ("Thank you for registering" + Click Here to Join the WhatsApp Group)
-       -> [5s analyzing loading screen]
-       -> survey.html (7 quick questions, one at a time, under 2 minutes; skippable)
-            -> [5s analyzing loading screen]
-            -> vip-offer.html (VIP pitch: hero + VSL placeholder + two paths)
-                 -> Keep Free Ticket -> [5s analyzing loading screen] -> join-whatsapp-free.html
-                 -> Upgrade to VIP   -> Whop checkout -> (after purchase, Whop redirects to)
-                                         join-whatsapp-vip.html -> VIP WhatsApp group link
+  -> join-whatsapp-free.html ("Join the WhatsApp group to lock in your spot")
+
+index.html ("Choose your path" section)
+  -> Get VIP Pass -> Whop checkout -> (after purchase, Whop redirects to)
+                       join-whatsapp-vip.html -> VIP WhatsApp group link
 ```
 
-The `name` from registration is carried through the URL (`?name=...`) across confirmation, survey and
-the VIP page, so it's available to personalize any of them further if you want. If Airtable is
-configured (see below), the registrant's new record id is also carried through as `?rid=...` from
-`index.html` to `confirmation.html` to `survey.html`, so the survey's answers land on that same row
-instead of creating a duplicate.
-
-## Analyzing loading screens
-
-Two points in the funnel show a 5-second full-screen loading sequence (spinner, progress bar, four
-rotating status lines) before moving on. This is purely perceived-value UX; nothing is actually being
-analyzed or verified.
-
-- **After submitting the registration form** (`index.html`): "Reviewing what you shared" -> "Matching
-  your answers to the right track" -> "Personalizing your experience" -> "Saving your spot", then
-  redirects to `confirmation.html`.
-- **After clicking "Click Here to Join the WhatsApp Group"** (`confirmation.html`): "Verifying your
-  registration" -> "Connecting to the WhatsApp group" -> "Setting up your access" -> "Almost there",
-  then redirects to `survey.html`.
-- **After finishing (or skipping) the survey** (`survey.html`): "Analyzing your answers" -> "Matching
-  you to the right track" -> "Almost there", then redirects to `vip-offer.html`.
-- **After clicking "Keep Free Ticket"** (`vip-offer.html`): "Locking in your free ticket" -> "Setting up
-  your access" -> "Getting your group ready" -> "Almost there", then redirects to
-  `join-whatsapp-free.html`. "Upgrade to VIP" skips this and goes straight to the Whop checkout, since
-  that's leaving the site for an external payment page.
-
-Both reuse the same `.analyzing-overlay` markup pattern and the shared `runAnalyzingSequence(messages,
-durationMs, onDone)` function in `js/site.js`. To add this to another transition, copy the
-`.analyzing-overlay` block from either page, give the page's link/button a click handler that calls
-`runAnalyzingSequence([...messages], 5000, () => window.location.href = '...')`, and call
-`event.preventDefault()` first so the click doesn't navigate immediately.
+The `name` from registration is carried through the URL (`?name=...`) to `join-whatsapp-free.html`, so
+it's available to personalize it further if you want. If Airtable is configured (see below), the
+registrant's new record id is also carried through as `?rid=...`.
 
 ## Files
 
 - `index.html`: the free-series landing page: hero, who-this-is-for, five-day breakdown (with a
   scroll-drawn trail connecting the five days, see below), why-free, registration form, social proof
   (placeholder), FAQ, final CTA
-- `confirmation.html`: post-registration page ("Thank you for registering"), single button that runs a
-  5-second "analyzing" loading screen before landing on `survey.html`
-- `survey.html`: 7 quick multiple-choice questions, one at a time, with a progress bar, auto-advance on
-  selection, a Back button on the last question, and a "Skip this for now" link that's always available.
-  Finishing (or skipping) runs the analyzing loading screen, then lands on `vip-offer.html`.
-- `vip-offer.html`: the VIP ticket pitch, same hero/VSL-placeholder structure as `index.html`, with two
-  buttons: **Keep Free Ticket** (runs the analyzing loading screen, then -> `join-whatsapp-free.html`)
-  and **Upgrade to VIP** (-> your live Whop checkout link)
-- `join-whatsapp-free.html`: where free-ticket registrants land, with a button to the free WhatsApp group
+- `vip-offer.html`: standalone VIP ticket pitch page, no longer linked from the main funnel (the landing
+  page's "Choose your path" section links straight to the Whop checkout instead); kept in the repo in
+  case it's needed again
+- `join-whatsapp-free.html`: where registrants land immediately after submitting the registration form,
+  with a button to the free WhatsApp group
 - `join-whatsapp-vip.html`: where VIP buyers land after Whop checkout. Thanks them, explains that
   everything they paid for is already waiting inside Whop (download the app or use a browser, log in
   with the email they paid with), and gives two buttons: **Open Whop** and **Join the VIP WhatsApp
@@ -80,13 +45,10 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
   (fixes the browser landing mid-page after a click), fades sections and individual cards/list items in
   as you scroll to them (each `.reveal` element animates independently via IntersectionObserver; items
   sharing a parent, like the day cards or FAQ entries, get a small incremental delay so they cascade in
-  one after another instead of popping in all at once), (on `vip-offer.html` only) gates the Keep Free
-  Ticket / Upgrade to VIP buttons behind the VSL's last 10 seconds, provides the reusable
-  `runAnalyzingSequence()` loading-screen sequence used across `index.html`, `confirmation.html`,
-  `survey.html` and `vip-offer.html`, and holds the `AIRTABLE_*` config + `airtableRequest()` helper used
-  to write registrants and survey answers into your dashboard's data source
+  one after another instead of popping in all at once), and holds the `AIRTABLE_*` config +
+  `airtableRequest()` helper used to write registrants into your dashboard's data source
 - `js/main.js`: client-side registration form validation, writes the registrant into Airtable, then
-  redirects to `confirmation.html`
+  redirects straight to `join-whatsapp-free.html`
 - `images/sandra-hero.jpg`: no longer used on the page; kept in the repo in case it's needed again
 
 ## The registration form
@@ -94,15 +56,6 @@ durationMs, onDone)` function in `js/site.js`. To add this to another transition
 Four fields only: first name, email, WhatsApp number (with a country-code dropdown covering ~50
 countries), and a required consent checkbox ("I agree to receive event reminders on WhatsApp"). The
 country code and number are combined into one `whatsapp` field in the submitted payload.
-
-## The survey
-
-Reachable only after registering (via confirmation.html), never as its own upfront ask, so it doesn't
-hurt the initial opt-in rate. All 7 questions are single-choice. Selecting an answer auto-advances to
-the next question after a short pause, except on the last question, where a "Submit Answers" button
-submits. A "Skip this for now" link is always visible so nobody gets stuck. If Airtable is configured
-and a `rid` was passed in from registration, submitting adds the seven answers (`Q1`-`Q7`) to that same
-Airtable record. Skipping the survey doesn't send anything, there are no answers to save.
 
 ## The day-by-day scroll trail on index.html
 
@@ -119,8 +72,8 @@ monochrome (matching `--line`/`--cream`), no color added.
 
 ## The starfield background
 
-Every customer-facing page (`index.html`, `vip-offer.html`, `confirmation.html`, `survey.html`,
-`join-whatsapp-free.html`, `join-whatsapp-vip.html`) has a subtly drifting starfield behind its
+Every customer-facing page (`index.html`, `vip-offer.html`, `join-whatsapp-free.html`,
+`join-whatsapp-vip.html`) has a subtly drifting starfield behind its
 near-black hero/wrap section: three layers of plain `var(--cream)` dots (~120 total, deliberately
 sparse), each layer looping upward at a different speed (90s/150s/220s) so it reads as ambient texture
 rather than a distraction. Pure CSS (the classic `box-shadow`-per-dot technique), no JS, no gradient
@@ -133,7 +86,7 @@ background or gradient text anywhere, matching the strict monochrome brief. Resp
   <div id="stars3"></div>
 </div>
 ```
-placed as the first child inside the page's `.hero` or `.confirm-wrap`/`.survey-wrap`, all of which have
+placed as the first child inside the page's `.hero` or `.confirm-wrap`, both of which have
 `position: relative` so the star layer's `position: absolute; inset: 0;` clips correctly.
 **`dashboard.html` deliberately does not have this.** It's an internal data tool, not a brand moment,
 and decorative motion isn't worth the distraction there.

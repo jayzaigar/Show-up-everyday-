@@ -78,7 +78,7 @@ form.addEventListener('submit', async (event) => {
 
   const query = new URLSearchParams({ name: firstName });
   if (recordId) query.set('rid', recordId);
-  window.location.href = `confirmation.html?${query.toString()}`;
+  window.location.href = `join-whatsapp-free.html?${query.toString()}`;
 });
 
 function isValidEmail(value) {

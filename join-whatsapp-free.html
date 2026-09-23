@@ -24,7 +24,6 @@
     <p>Your registration isn't secured until you join. This is also where your live links, reminders and preparation instructions go out, so you won't want to miss it.</p>
     <div class="confirm-actions">
       <a href="https://chat.whatsapp.com/HGVjOGq0Ect46p7zN4FzuN?mode=gi_t" class="btn btn-primary btn-lg btn-full" target="_blank" rel="noopener">Join the WhatsApp Group</a>
-      <a href="survey.html" id="optional-survey-link" class="btn btn-outline btn-lg btn-full">Take the Quick Survey</a>
     </div>
     <p class="microcopy">You're not fully registered for The Show Up Everyday Series until you've joined.</p>
   </div>
@@ -35,15 +34,5 @@
 </footer>
 
 <script src="js/site.js"></script>
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get('name');
-  const rid = params.get('rid');
-  const surveyLink = document.getElementById('optional-survey-link');
-  const query = new URLSearchParams();
-  if (name) query.set('name', name);
-  if (rid) query.set('rid', rid);
-  if (query.toString()) surveyLink.href = `${surveyLink.getAttribute('href')}?${query.toString()}`;
-</script>
 </body>
 </html>
